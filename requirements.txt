@@ -1,0 +1,9 @@
+gevent
+pexpect
+pyCryptodomex
+pyasn1
+pyOpenSSL
+pypykatz
+WsgiDAV
+cheroot
+lxml

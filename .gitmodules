@@ -1,0 +1,3 @@
+[submodule "submodules/impacket"]
+	path = submodules/impacket
+	url = https://github.com/SecureAuthCorp/impacket.git

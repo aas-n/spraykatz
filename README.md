@@ -15,14 +15,14 @@ A tool to spray love around the world by [@lydericlefebvre](https://twitter.com/
 Spraykatz is a tool without any pretention able to **retrieve credentials** on large Active Directory networks. It tries to __filelessly procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
 
 ### Installation
-This tool is written for **`>= python3.6`**.
+This tool is written for **`>= python3.6`**. You have to use python3.6 and pip3.6.
 #### Ubuntu
+On a fresh updated Ubuntu.
 ```bash
 apt update
-apt install -y python3.6 python3-pip nmap
-```
-Next, simply install requirements.
-```bash
+apt install -y python3.6 python3-pip git nmap
+git clone --recurse-submodules https://github.com/aas-n/spraykatz.git
+cd spraykatz
 pip3 install -r requirements.txt
 ```
 
@@ -44,11 +44,14 @@ A simple example could be:
 
 ### TODO
 Many things to come:
-- [ ] Targets file as input
+- [x] Targets file as input
+- [ ] Use nmap python
 - [ ] Threading
+- [ ] Logging
+- [ ] Put gif instead of an image in README.md
 - [ ] Refactoring code
 - [ ] Domadmin features
-- [ ] Use Impacket with pip instead of hard submodules
+- [x] Use Impacket as git submodules
 - [ ] Tests
 
 ### Acknowlegments  
@@ -57,6 +60,7 @@ Spraykatz uses slighlty modified parts of the following projects:
 * [Pypykatz](https://github.com/skelsec/pypykatz)
 * [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec)
 * [Pywerview](https://github.com/the-useless-one/pywerview)
+* [Sysinternals](https://docs.microsoft.com/en-us/sysinternals/downloads/)
 
 # 
 *Created by [Lydéric Lefebvre](https://www.linkedin.com/in/lydericlefebvre/)*
