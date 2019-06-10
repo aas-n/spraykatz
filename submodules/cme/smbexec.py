@@ -1,9 +1,15 @@
-import logging
-import os, sys
-from gevent import sleep
+# coding: utf-8
+#
+# This file comes from Impacket & CrackMapExec project
+# Slightly modified for Spraykatz.
+
+
+# Imports
+import os, sys, logging, time
+from core.Utils import *
 from impacket.dcerpc.v5 import transport, scmr
 from impacket.smbconnection import *
-import random, string
+
 
 class SMBEXEC:
 
@@ -13,7 +19,7 @@ class SMBEXEC:
         self.__port = port
         self.__username = username
         self.__password = password
-        self.__serviceName = ''.join(random.sample(string.ascii_letters, 6))
+        self.__serviceName = gen_random_string(6)
         self.__domain = domain
         self.__lmhash = ''
         self.__nthash = ''
@@ -65,8 +71,8 @@ class SMBEXEC:
         self.__outputBuffer += data
 
     def execute_fileless(self, data):
-        self.__output = ''.join(random.sample(string.ascii_letters, 6))
-        self.__batchFile = ''.join(random.sample(string.ascii_letters, 6)) + '.bat'
+        self.__output = gen_random_string(6)
+        self.__batchFile = gen_random_string(6) + '.bat'
         local_ip = self.__rpctransport.get_socket().getsockname()[0]
 
         data = data.replace('&', '^&')
@@ -102,10 +108,14 @@ class SMBEXEC:
         while True:
             try:
                 with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', self.__output), 'r') as output:
-                    self.output_callback(output.read())
-                break
+                    out = output.read()
+                    if "Dump count reached" in out:
+                        self.output_callback(output.read())
+                        break
+                    else:
+                        time.sleep(1)
             except IOError:
-                sleep(2)
+                time.sleep(2)
 
     def finish(self):
         try:

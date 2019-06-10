@@ -12,7 +12,9 @@ A tool to spray love around the world by [@lydericlefebvre](https://twitter.com/
 | [Acknowlegments](#acknowlegments)  | Acknowlegments. |
 
 ### About  
-Spraykatz is a tool without any pretention able to **retrieve credentials** on large Active Directory networks. It tries to __filelessly procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
+Spraykatz is a tool without any pretention able to **retrieve credentials** on large Active Directory networks.
+
+It tries to __filelessly procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
 
 ### Installation
 This tool is written for **`>= python3.6`**. You have to use python3.6 and pip3.6.
@@ -26,34 +28,50 @@ cd spraykatz
 pip3 install -r requirements.txt
 ```
 
-### Using Spraykatz  
-
-| Switches | Mandatory | Description |
-| ------ |:------------|:--------|
-| -u, --username | Yes | The user must have admin rights on targeted systems in order to have code execution. |
-| -p, --password | Yes | This password can also be a NTLM hash in the `LM:NT` format. |
-| -t, --targets | Yes | Targets can be IP addresses or IP addresses ranges. Targets can be submitted via a targets file (one target per line) or inline (separated by commas). |
-| -d, --domain | No | If the user is **not** member of a domain, you can use `-d .` of nothing at all. |
-| -m, --methods | No | Execution method to use. If omitted, wmiexec is tried first, then atexec, and  then smbexec. |
-| -s, --share | No | SMB Share to use for command execution. By default: `C$`. |
-
-A simple example could be:
+### Using Spraykatz
+A quick start could be:
 ```bash
 ./spraykatz.py -d company.local -u H4x0r -p L0c4L4dm1n -t 192.168.1.0/24
 ```
 
+#### Mandatory arguments
+| Switches | Description |
+| -------|:--------|
+| -d, --domain | User's domain. If he is **not** member of a domain, simply use `-d .` instead. |
+| -u, --username | User to spray with. He must have admin rights on targeted systems in order to gain remote code execution. |
+| -p, --password | User's password or NTLM hash in the `LM:NT` format. |
+| -t, --targets | IP addresses and/or IP address ranges. You can submit them via a file of targets (one target per line), or inline (separated by commas). |
+
+#### Optional arguments
+| Switches | Description |
+| -------|:--------|
+| -m, --methods | Execution method to use. If omitted, wmiexec is tried first, then atexec, and  then smbexec. |
+| -s, --share | SMB Share to use for command execution. By default: `C$`. |
+| -q, --quiet | Quiet mode. Default is verbose. |
+
 ### TODO
-Many things to come:
+v1.0.0
 - [x] Targets file as input
-- [ ] Use nmap python
-- [ ] Threading
-- [ ] Logging
-- [ ] Put gif instead of an image in README.md
-- [ ] Refactoring code
-- [ ] Domadmin features
 - [x] Use Impacket as git submodules
-- [ ] Implement mmcexec
-- [ ] Tests
+- [x] Threading
+- [x] Logging
+- [x] Refactoring code
+- [x] Require domain argument
+- [x] Refactoring Utils
+- [x] Imports review
+- [ ] suicide thread inside exec if too long
+- [ ] Use nmap python
+- [ ] README (Logo, Gif, Release Version)
+- [ ] License
+
+v1.1.0
+- [ ] Bypass AVs (lsass dump)
+
+v1.2.0
+- [ ] isDomAdmin feature
+
+v1.3.0
+- [ ] SQLite Support
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:

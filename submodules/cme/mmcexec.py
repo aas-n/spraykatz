@@ -1,35 +1,16 @@
-#!/usr/bin/python
-# Copyright (c) 2003-2016 CORE Security Technologies
+# coding: utf-8
 #
-# This software is provided under under a slightly modified version
-# of the Apache Software License. See the accompanying LICENSE file
-# for more information.
-#
-# A similar approach to wmiexec but executing commands through MMC.
-# Main advantage here is it runs under the user (has to be Admin) 
-# account, not SYSTEM, plus, it doesn't generate noisy messages
-# in the event log that smbexec.py does when creating a service.
-# Drawback is it needs DCOM, hence, I have to be able to access 
-# DCOM ports at the target machine.
-#
-# Original discovery by Matt Nelson (@enigma0x3):
-# https://enigma0x3.net/2017/01/05/lateral-movement-using-the-mmc20-application-com-object/
-#
-# Author:
-#  beto (@agsolino)
-#
-# Reference for:
-#  DCOM
-#
-# ToDo:
-# [ ] Kerberos auth not working, invalid_checksum is thrown. Most probably sequence numbers out of sync due to
-#     getInterface() method
-#
+# This file comes from Impacket & CrackMapExec project
+# Slightly modified for Spraykatz.
 
+
+# Imports
 import logging
 import os
+import time
 from gevent import sleep
 
+from core.Utils import *
 from impacket import version
 from impacket.dcerpc.v5.dcom.oaut import IID_IDispatch, string_to_bin, IDispatch, DISPPARAMS, DISPATCH_PROPERTYGET, \
     VARIANT, VARENUM, DISPATCH_METHOD
@@ -40,6 +21,7 @@ from impacket.dcerpc.v5.dcomrt import OBJREF, FLAGS_OBJREF_CUSTOM, OBJREF_CUSTOM
 from impacket.dcerpc.v5.dtypes import NULL
 from impacket.examples import logger
 from impacket.smbconnection import SMBConnection, SMB_DIALECT, SMB2_DIALECT_002, SMB2_DIALECT_21
+
 
 class MMCEXEC:
     def __init__(self, host, share_name, username, password, domain, smbconnection, hashes=None):
@@ -184,7 +166,11 @@ class MMCEXEC:
         while True:
             try:
                 with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', self.__output), 'r') as output:
-                    self.output_callback(output.read())
-                break
+                    out = output.read()
+                    if "Dump count reached" in out:
+                        self.output_callback(output.read())
+                        break
+                    else:
+                        time.sleep(0.5)
             except IOError:
                 sleep(2)

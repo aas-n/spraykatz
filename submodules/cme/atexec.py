@@ -1,9 +1,15 @@
-import os, sys
-import logging
+# coding: utf-8
+#
+# This file comes from Impacket & CrackMapExec project
+# Slightly modified for Spraykatz.
+
+
+# Imports
+import os, sys, logging, time
+from core.Utils import *
 from impacket.dcerpc.v5 import tsch, transport
 from impacket.dcerpc.v5.dtypes import NULL
-import random, string
-import time
+
 
 class TSCH_EXEC:
     def __init__(self, target, share_name, username, password, domain, hashes=None):
@@ -119,17 +125,17 @@ class TSCH_EXEC:
         dce.set_credentials(*self.__rpctransport.get_credentials())
         dce.connect()
         dce.bind(tsch.MSRPC_UUID_TSCHS)
-        tmpName = ''.join(random.sample(string.ascii_letters, 8))
+        tmpName = gen_random_string(8)
         tmpFileName = tmpName + '.tmp'
 
         xml = self.gen_xml(command, tmpFileName, fileless)
 
         taskCreated = False
-        logging.info('Creating task \\%s' % tmpName)
+        logging.debug('Creating task \\%s' % tmpName)
         tsch.hSchRpcRegisterTask(dce, '\\%s' % tmpName, xml, tsch.TASK_CREATE, NULL, tsch.TASK_LOGON_NONE)
         taskCreated = True
 
-        logging.info('Running task \\%s' % tmpName)
+        logging.debug('Running task \\%s' % tmpName)
         tsch.hSchRpcRun(dce, '\\%s' % tmpName)
 
         done = False
@@ -141,7 +147,7 @@ class TSCH_EXEC:
             else:
                 time.sleep(2)
 
-        logging.info('Deleting task \\%s' % tmpName)
+        logging.debug('Deleting task \\%s' % tmpName)
         tsch.hSchRpcDelete(dce, '\\%s' % tmpName)
         taskCreated = False
 
@@ -153,9 +159,16 @@ class TSCH_EXEC:
                 while True:
                     try:
                         with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', tmpFileName), 'r') as output:
-                            self.output_callback(output.read())
-                        break
+                            out = output.read()
+                            if "Dump count reached" in out:
+                                self.output_callback(output.read())
+                                break
+                            else:
+                                time.sleep(0.5)
                     except IOError:
+                        time.sleep(2)
+                    except Exception as e:
+                        print("Error: ", e)
                         time.sleep(2)
             else:
                 peer = ':'.join(map(str, self.__rpctransport.get_socket().getpeername()))

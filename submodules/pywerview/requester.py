@@ -1,7 +1,11 @@
 # -*- coding: utf8 -*-
-# This file is part of PywerView.
-# Yannick Méheut [yannick (at) meheut (dot) org] - Copyright © 2016
+# coding: utf-8
+#
+# This file comes from Pywerview project by Yannick Méheut [yannick (at) meheut (dot) org] - Copyright © 2016
+# Slightly modified for Spraykatz.
 
+
+# Imports
 import socket
 import ntpath
 from impacket.ldap import ldap, ldapasn1
@@ -12,6 +16,7 @@ from impacket.dcerpc.v5.dcom import wmi
 from impacket.dcerpc.v5.dtypes import NULL
 from impacket.dcerpc.v5.dcomrt import DCOMConnection
 from impacket.dcerpc.v5.rpcrt import DCERPCException
+
 
 class LDAPRequester():
     def __init__(self, domain_controller, domain=str(), user=(), password=str(), lmhash=str(), nthash=str()):

@@ -1,9 +1,12 @@
-#!/usr/bin/env python
-# -*- coding: utf8 -*-
-# This file is part of PywerView.
-# Yannick Méheut [yannick (at) meheut (dot) org] - Copyright © 2016
+# coding: utf-8
+#
+# This file comes from Pywerview project by Yannick Méheut [yannick (at) meheut (dot) org] - Copyright © 2016
+# Slightly modified for Spraykatz.
 
-from submodules.pywerview.misc import Misc
+
+# Imports
+from misc import Misc
+
 
 def invoke_checklocaladminaccess(target_computername, domain, user, password=str(), lmhash=str(), nthash=str()):
     misc = Misc(target_computername, domain, user, password, lmhash, nthash)

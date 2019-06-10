@@ -1,10 +1,15 @@
 # -*- coding: utf8 -*-
-# This file is part of PywerView.
-# Yannick Méheut [yannick (at) meheut (dot) org] - Copyright © 2016
+# coding: utf-8
+#
+# This file comes from Pywerview project by Yannick Méheut [yannick (at) meheut (dot) org] - Copyright © 2016
+# Slightly modified for Spraykatz.
 
+
+# Imports
+from requester import LDAPRPCRequester
 from submodules.impacket.impacket.dcerpc.v5.rpcrt import DCERPCException
 from submodules.impacket.impacket.dcerpc.v5 import scmr
-from submodules.pywerview.requester import LDAPRPCRequester
+
 
 class Misc(LDAPRPCRequester):
     @LDAPRPCRequester._rpc_connection_init(r'\svcctl')

