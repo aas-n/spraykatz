@@ -52,6 +52,7 @@ Many things to come:
 - [ ] Refactoring code
 - [ ] Domadmin features
 - [x] Use Impacket as git submodules
+- [ ] Implement mmcexec
 - [ ] Tests
 
 ### Acknowlegments  
