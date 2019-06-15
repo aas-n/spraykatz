@@ -7,22 +7,25 @@
 
 
 # Imports
-import logging
+import logging, nmap
 from core.Colors import *
 from subprocess import Popen, PIPE
 from helpers import invoke_checklocaladminaccess
 
 
 def listSmbTargets(args_targets):
-	''' List targetable machines '''
-	smbTargets = Popen("nmap -T4 -Pn -n --open -p135 -oG - %s | awk '$NF~/msrpc/{print $2}'" % (' '.join(args_targets)), stdout=PIPE, shell=True).communicate()[0].decode("utf8").strip().split()
-	if not smbTargets:
+	strTargets = ' '.join(args_targets)
+	nm = nmap.nmap.PortScanner()
+	nm.scan(strTargets, arguments='-T4 -sS -Pn --open -p 135')
+
+	if nm.all_hosts():
+		return nm.all_hosts()
+	else:
 		logging.warning("%sNo targets with open port 135 available. Quitting." % (warningRed))
 		exit(2)
-	return smbTargets
 
 def listPwnableTargets(args_targets, user):
-	logging.warning("%sListing targetable machines into networks provided. Be patient." % (warningGre))
+	logging.warning("%sListing targetable machines into networks provided. Can take a while..." % (warningGre))
 	pwnableTargets = []
 	targets = []
 

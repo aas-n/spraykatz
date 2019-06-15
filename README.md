@@ -47,6 +47,7 @@ A quick start could be:
 | -------|:--------|
 | -m, --methods | Execution method to use. If omitted, wmiexec is tried first, then atexec, and  then smbexec. |
 | -s, --share | SMB Share to use for command execution. By default: `C$`. |
+| -w, --wait | Timeout for each procdump thread to finish. Default: 10 seconds. |
 | -q, --quiet | Quiet mode. Default is verbose. |
 
 ### TODO
@@ -59,8 +60,8 @@ v1.0.0
 - [x] Require domain argument
 - [x] Refactoring Utils
 - [x] Imports review
-- [ ] suicide thread inside exec if too long
-- [ ] Use nmap python
+- [x] suicide thread inside exec if too long
+- [x] Use nmap python
 - [ ] README (Logo, Gif, Release Version)
 - [ ] License
 

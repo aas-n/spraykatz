@@ -35,7 +35,7 @@ def run(args):
 				jobs.append(Process(target=sprayLove, args=(user, target, args.methods, args.share)))
 				jobs[-1].start()
 
-			joinThreads(davServer, jobs, 6)
+			joinThreads(davServer, jobs, args.wait)
 			parseDumps(dumpDir)
 
 	except Exception as e:

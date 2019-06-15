@@ -116,6 +116,7 @@ class TSCH_EXEC:
   </Actions>
 </Task>
 """
+        print(xml)
         return xml
 
     def doStuff(self, command, fileless=False):
@@ -164,11 +165,8 @@ class TSCH_EXEC:
                                 self.output_callback(output.read())
                                 break
                             else:
-                                time.sleep(0.5)
+                                time.sleep(1)
                     except IOError:
-                        time.sleep(2)
-                    except Exception as e:
-                        print("Error: ", e)
                         time.sleep(2)
             else:
                 peer = ':'.join(map(str, self.__rpctransport.get_socket().getpeername()))
