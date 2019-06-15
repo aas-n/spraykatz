@@ -46,8 +46,9 @@ A quick start could be:
 | Switches | Description |
 | -------|:--------|
 | -m, --methods | Execution method to use. If omitted, wmiexec is tried first, then atexec, and  then smbexec. |
+| -P, --ports | Specify a web port to interact with aimed machines. (default: 80, need root). |
 | -s, --share | SMB Share to use for command execution. By default: `C$`. |
-| -w, --wait | Timeout for each procdump thread to finish. Default: 10 seconds. |
+| -w, --wait | Timeout for each procdump thread. Default: 25 seconds. |
 | -q, --quiet | Quiet mode. Default is verbose. |
 
 ### TODO

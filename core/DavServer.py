@@ -7,22 +7,22 @@
 
 
 # Imports
-import logging, pexpect
+import os, logging, pexpect
 from core.Colors import *
+from core.Paths import *
 
 
-def launchDavServer(q):
+def launchDavServer(q, port):
 	try:
 		logging.warning("%sStarting WebDAV Server." % (warningGre))
-		child = pexpect.spawn('wsgidav --host=0.0.0.0 --port=80 --root=misc --auth=anonymous --server=gevent', timeout=10)
+		os.chdir(homeDir)
+		child = pexpect.spawn('wsgidav --host=0.0.0.0 --port=%s --root=. --auth=anonymous --server=gevent' % (int(port)), timeout=10)
 		child.expect('Serving on ')
 		st = child.read_nonblocking(timeout=2)
 	except pexpect.TIMEOUT:
 		logging.info("%s   WebDAV Server successfuly launched." % (infoYellow))
 		q.put(0)
 		child.expect(pexpect.EOF, timeout=None)
-		child.close()
-		child.exit()
 	except KeyboardInterrupt:
 		logging.warning("%s   Keyboard interrupt. Exiting WebDAV Server..." % (warningRed))
 	except Exception as e:

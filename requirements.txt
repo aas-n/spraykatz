@@ -7,4 +7,3 @@ pypykatz
 WsgiDAV
 cheroot
 lxml
-python-nmap

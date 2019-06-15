@@ -16,6 +16,9 @@ from core.Colors import *
 def initSpraykatz():
 	if not os.path.isdir(tmpDir) : os.mkdir(tmpDir)
 	if not os.path.isdir(dumpDir) : os.mkdir(dumpDir)
+	if os.getuid() == 0:
+		os.chmod(tmpDir, 0o777)
+		os.chmod(dumpDir, 0o777)
 	return menu()
 
 def joinThreads(davServer, jobs, timeout):
@@ -45,8 +48,8 @@ def joinThreads(davServer, jobs, timeout):
 
 def freeSpraykatz(davServer, jobs, timeout):
 	joinThreads(davServer, jobs, timeout)
-	#for f in os.listdir(tmpDir):
-	#	os.remove(os.path.join(tmpDir, f))
+	for f in os.listdir(tmpDir):
+		os.remove(os.path.join(tmpDir, f))
 
 	for f in os.listdir(dumpDir):
 		os.remove(os.path.join(dumpDir, f))

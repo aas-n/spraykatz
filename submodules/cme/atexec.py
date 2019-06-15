@@ -12,7 +12,7 @@ from impacket.dcerpc.v5.dtypes import NULL
 
 
 class TSCH_EXEC:
-    def __init__(self, target, share_name, username, password, domain, hashes=None):
+    def __init__(self, target, share_name, username, password, domain, hashes=None, port="80"):
         self.__target = target
         self.__username = username
         self.__password = password
@@ -22,6 +22,7 @@ class TSCH_EXEC:
         self.__nthash = ''
         self.__outputBuffer = ''
         self.__retOutput = False
+        self.__port = port
 
         if hashes is not None:
             if hashes.find(':') != -1:
@@ -100,7 +101,7 @@ class TSCH_EXEC:
             if fileless:
                 local_ip = self.__rpctransport.get_socket().getsockname()[0]
                 command = command.replace('&', '&amp;')
-                argument_xml = "      <Arguments>/C {} &gt; \\\\{}\\tmp\\{} 2&gt;&amp;1</Arguments>".format(command, local_ip, tmpFileName)
+                argument_xml = "      <Arguments>/C {} &gt; \\\\{}@{}\\misc\\tmp\\{} 2&gt;&amp;1</Arguments>".format(command, local_ip, self.__port, tmpFileName)
             else:
                 argument_xml = "      <Arguments>/C {} &gt; %windir%\\Temp\\{} 2&gt;&amp;1</Arguments>".format(command, tmpFileName)
 
@@ -116,7 +117,6 @@ class TSCH_EXEC:
   </Actions>
 </Task>
 """
-        print(xml)
         return xml
 
     def doStuff(self, command, fileless=False):

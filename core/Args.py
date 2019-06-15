@@ -43,8 +43,9 @@ def menu():
 	
 	optionalArgs = parser.add_argument_group('Optional Arguments')
 	optionalArgs.add_argument("-m", "--methods", help="Methods used for spraying. Can be wmiexec, atexec or smbexec. Default: wmiexec.", choices=['wmiexec', 'atexec', 'smbexec'], default=None)
+	optionalArgs.add_argument("-P", "--port", help="Specify a web port to interact with aimed machines. (default: 80, need root).", default="80")
 	optionalArgs.add_argument("-s", "--share", help="Specify a share (default: C$).", default="C$")
-	optionalArgs.add_argument("-w", "--wait", help="Timeout for each procdump thread to finish. Default: 10 seconds.", default=10)
+	optionalArgs.add_argument("-w", "--wait", help="Timeout for each procdump thread. Default: 25 seconds.", default=25)
 	optionalArgs.add_argument("-q", "--quiet", help="Quiet mode.", action="store_true")
 
 	return parser
