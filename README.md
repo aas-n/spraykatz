@@ -1,5 +1,21 @@
-# [```SPRAYKATZ```](https://github.com/aas-n/spraykatz/blob/master/README.md)
-A tool to spray love around the world by [@lydericlefebvre](https://twitter.com/lydericlefebvre).
+<h1 align="center">
+  <br>
+  <a href="https://github.com/aas-n/spraykatz/"><img src="https://image.noelshack.com/fichiers/2019/24/7/1560693180-cat.png" alt="Spraykatz"></a>
+  <br>
+  Spraykatz
+  <br>
+</h1>
+
+<h4 align="center">Spray love around the world</h4>
+<p align="center">
+  <a href="https://github.com/aas-n/spraykatz">
+    <img src="https://img.shields.io/badge/release-1.0.0-green.svg">
+  </a>
+  <a href="https://twitter.com/lydericlefebvre">
+    <img src="https://img.shields.io/badge/Twitter-%40lydericlefebvre-blue.svg">
+  </a>
+</p>
+
 
 ### Index
 
@@ -11,11 +27,11 @@ A tool to spray love around the world by [@lydericlefebvre](https://twitter.com/
 | [Todo](#todo)  | Things planned to improve this tool. |
 | [Acknowlegments](#acknowlegments)  | Acknowlegments. |
 
-### About  
+### About 
 Spraykatz is a tool without any pretention able to **retrieve credentials** on large Active Directory networks.
 
 It tries to __filelessly procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
-
+#
 ### Installation
 This tool is written for **`>= python3.6`**. You have to use python3.6 and pip3.6.
 #### Ubuntu
@@ -52,36 +68,19 @@ A quick start could be:
 | -q, --quiet | Quiet mode. Default is verbose. |
 
 ### TODO
-v1.0.0
-- [x] Targets file as input
-- [x] Use Impacket as git submodules
-- [x] Threading
-- [x] Logging
-- [x] Refactoring code
-- [x] Require domain argument
-- [x] Refactoring Utils
-- [x] Imports review
-- [x] suicide thread inside exec if too long
-- [x] Use nmap python
-- [ ] README (Logo, Gif, Release Version)
-- [ ] License
-
 v1.1.0
-- [ ] Bypass AVs (lsass dump)
-
-v1.2.0
-- [ ] isDomAdmin feature
-
-v1.3.0
 - [ ] SQLite Support
+- [ ] IsDomainAdmin() feature
+- [ ] Bypass AVs (lsass dump)
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:
+* [Mimikatz](https://github.com/gentilkiwi/mimikatz)
 * [Impacket](https://github.com/SecureAuthCorp/impacket)
 * [Pypykatz](https://github.com/skelsec/pypykatz)
 * [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec)
 * [Pywerview](https://github.com/the-useless-one/pywerview)
 * [Sysinternals](https://docs.microsoft.com/en-us/sysinternals/downloads/)
 
-# 
-*Created by [Lydéric Lefebvre](https://www.linkedin.com/in/lydericlefebvre/)*
+#
+Written by [Lydéric Lefebvre](https://www.linkedin.com/in/lydericlefebvre/)
