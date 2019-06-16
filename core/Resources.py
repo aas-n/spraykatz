@@ -27,7 +27,7 @@ def joinThreads(davServer, jobs, timeout):
 		for job in jobs:
 			if not job.is_alive():
 				job.join()
-		
+
 		if all(not p.is_alive() for p in jobs):
 			break
 		else:
@@ -40,7 +40,7 @@ def joinThreads(davServer, jobs, timeout):
 			job.join()
 
 	logging.debug("%sSpray threads terminated." % (debugBlue))
-	
+
 	if davServer.is_alive():
 		davServer.terminate()
 		davServer.join()
@@ -48,11 +48,13 @@ def joinThreads(davServer, jobs, timeout):
 
 def freeSpraykatz(davServer, jobs, timeout):
 	joinThreads(davServer, jobs, timeout)
+
 	for f in os.listdir(tmpDir):
 		os.remove(os.path.join(tmpDir, f))
 
 	for f in os.listdir(dumpDir):
 		os.remove(os.path.join(dumpDir, f))
+
 
 def exit_gracefully(davServer, jobs):
 	logging.warning("\n%sExiting Gracefully..." % (warningGre))

@@ -45,7 +45,7 @@ def menu():
 	optionalArgs.add_argument("-m", "--methods", help="Methods used for spraying. Can be wmiexec, atexec or smbexec. Default: wmiexec.", choices=['wmiexec', 'atexec', 'smbexec'], default=None)
 	optionalArgs.add_argument("-P", "--port", help="Specify a web port to interact with aimed machines. (default: 80, need root).", default="80")
 	optionalArgs.add_argument("-s", "--share", help="Specify a share (default: C$).", default="C$")
-	optionalArgs.add_argument("-w", "--wait", help="Timeout for each procdump thread. Default: 25 seconds.", default=25)
+	optionalArgs.add_argument("-w", "--wait", help="Timeout for each procdump thread. Default: 50 seconds. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps.", default=50)
 	optionalArgs.add_argument("-q", "--quiet", help="Quiet mode.", action="store_true")
 
 	return parser

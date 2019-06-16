@@ -79,7 +79,6 @@ class WMIEXEC:
                 self.cd('\\')
                 self.execute_remote(data)
         else:
-            print("llll")
             self.execute_remote(data)
 
     def execute_remote(self, data):
@@ -94,7 +93,8 @@ class WMIEXEC:
     def execute_fileless(self, data):
         self.__output = gen_random_string(6)
         local_ip = self.__smbconnection.getSMBServer().get_socket().getsockname()[0]
-        command = self.__shell + data + ' 1> \\\\{}@{}\\misc\\tmp\\{} 2>&1'.format(local_ip, self.__port, self.__output)
+        command = self.__shell + data + ' 1> tmp\\{} 2>&1 & popd'.format(self.__output)
+        #command = self.__shell + data + ' 1> \\\\{}@{}\\misc\\tmp\\{} 2>&1'.format(local_ip, self.__port, self.__output)
         logging.debug('Executing command: ' + command)
         self.__win32Process.Create(command, self.__pwd, None)
         self.get_output_fileless()
@@ -104,13 +104,11 @@ class WMIEXEC:
             try:
                 with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', self.__output), 'r') as output:
                     out = output.read()
-                    if "Dump count reached" in out:
-                    	self.output_callback(output.read())
-                    	break
-                    else:
-                    	time.sleep(0.5)
+                    if "TOTHEMOON" in out:
+                        self.output_callback(output.read())
+                        break
             except IOError:
-                time.sleep(2)
+                time.sleep(1)
 
     def get_output_remote(self):
         if self.__retOutput is False:

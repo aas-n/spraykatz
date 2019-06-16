@@ -22,7 +22,7 @@ def parseDumps(dumpFolder):
 	dico = {}
 
 	globdata = os.path.join(dumpDir, '*.dmp')
-	
+
 	for filename in glob.glob(globdata):
 		try:
 			mimi = pypykatz.parse_minidump_file(filename)

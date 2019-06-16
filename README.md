@@ -16,26 +16,22 @@
   </a>
 </p>
 
-
 ### Index
-
 | Title        | Description   |
 | ------------- |:-------------|
 | [About](#about)  | Brief Description about the tool |
 | [Installation](#installation)  | Installation and Requirements |
 | [Usage](#using-spraykatz)  | How to use Spraykatz |
-| [Todo](#todo)  | Things planned to improve this tool |
 | [Acknowlegments](#acknowlegments)  | Acknowlegments |
 
 ### About 
 Spraykatz is a tool without any pretention able to **retrieve credentials** on large Active Directory networks.
 
-It tries to __filelessly procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
+It simply tries to __filelessly procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
 
-![](preview.gif)
 
 ### Installation
-This tool is written for **`>= python3.6`**. You have to use python3.6 and pip3.6.
+This tool is written for **`python3.6`**. You have to use python3.6 and pip3.6.
 #### Ubuntu
 On a fresh updated Ubuntu.
 ```bash
@@ -52,6 +48,10 @@ A quick start could be:
 ./spraykatz.py -d company.local -u H4x0r -p L0c4L4dm1n -t 192.168.1.0/24
 ```
 
+<h3 align="center">
+  <a href="https://github.com/aas-n/spraykatz"><img src="preview.gif" alt="Spraykatz"></a>
+</h3>
+
 #### Mandatory arguments
 | Switches | Description |
 | -------|:--------|
@@ -66,14 +66,8 @@ A quick start could be:
 | -m, --methods | Execution method to use. If omitted, wmiexec is tried first, then atexec, and  then smbexec. |
 | -P, --ports | Specify a web port to interact with aimed machines. (default: 80, need root). |
 | -s, --share | SMB Share to use for command execution. By default: `C$`. |
-| -w, --wait | Timeout for each procdump thread. Default: 25 seconds. |
+| -w, --wait | Timeout for each procdump thread. Default: 50 seconds. A low timeout may give bad dumps. Do not hesitate to increase timeout in case of bad dumps. |
 | -q, --quiet | Quiet mode. Default is verbose. |
-
-### TODO
-v1.1.0
-- [ ] SQLite Support
-- [ ] IsDomainAdmin() feature
-- [ ] Bypass AVs (lsass dump)
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:
