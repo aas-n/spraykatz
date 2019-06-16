@@ -21,17 +21,19 @@
 
 | Title        | Description   |
 | ------------- |:-------------|
-| [About](#about)  | Brief Description about the tool. |
-| [Installation](#installation)  | Installation and Requirements. |
-| [Usage](#using-spraykatz)  | How to use Spraykatz. |
-| [Todo](#todo)  | Things planned to improve this tool. |
-| [Acknowlegments](#acknowlegments)  | Acknowlegments. |
+| [About](#about)  | Brief Description about the tool |
+| [Installation](#installation)  | Installation and Requirements |
+| [Usage](#using-spraykatz)  | How to use Spraykatz |
+| [Todo](#todo)  | Things planned to improve this tool |
+| [Acknowlegments](#acknowlegments)  | Acknowlegments |
 
 ### About 
 Spraykatz is a tool without any pretention able to **retrieve credentials** on large Active Directory networks.
 
 It tries to __filelessly procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
-#
+
+![](preview.gif)
+
 ### Installation
 This tool is written for **`>= python3.6`**. You have to use python3.6 and pip3.6.
 #### Ubuntu
