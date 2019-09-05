@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # coding: utf-8
 
 # Author:	Lyderic LEFEBVRE
@@ -13,7 +13,6 @@ from core.Colors import *
 from core.Resources import *
 from core.Engine import *
 
-
 def printBanner():
 	''' Print the tool banner '''
 	os.system("clear")
@@ -26,7 +25,7 @@ def printBanner():
 	print ("╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝%sv1.0.0%s" % (green, white))
 	print ("                                                                          ")
 	print ("                    Written by %s@lydericlefebvre%s                       " % (red, white))
-	print ("")                                                            
+	print ("                                                                          ")
 
 
 if __name__ == '__main__':

