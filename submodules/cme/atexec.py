@@ -39,24 +39,24 @@ class TSCH_EXEC:
         if hasattr(self.__rpctransport, 'set_credentials'):
             self.__rpctransport.set_credentials(self.__username, self.__password, self.__domain, self.__lmhash, self.__nthash)
 
-    def execute(self, command, output=False):
+    def execute(self, command, alea, output=False):
         self.__retOutput = output
-        self.execute_handler(command)
+        self.execute_handler(command, alea)
         return self.__outputBuffer
 
     def output_callback(self, data):
         self.__outputBuffer = data
 
-    def execute_handler(self, data):
+    def execute_handler(self, data, alea):
         if self.__retOutput:
             try:
-                self.doStuff(data, fileless=True)
+                self.doStuff(data, alea, fileless=True)
             except:
-                self.doStuff(data)
+                self.doStuff(data, alea)
         else:
-            self.doStuff(data)
+            self.doStuff(data, alea)
 
-    def gen_xml(self, command, tmpFileName, fileless=False):
+    def gen_xml(self, command, alea, tmpFileName, fileless=False):
 
         xml = """<?xml version="1.0" encoding="UTF-16"?>
 <Task version="1.2" xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task">
@@ -101,10 +101,11 @@ class TSCH_EXEC:
             if fileless:
                 local_ip = self.__rpctransport.get_socket().getsockname()[0]
                 command = command.replace('&', '&amp;')
-                argument_xml = "      <Arguments>/C {} &gt; tmp\\{} &amp; popd</Arguments>".format(command, tmpFileName)
+                command = command.replace('ABCD', '%')
+                command = command.replace('EFGH', '%')
+                argument_xml = "      <Arguments>/C {} &gt; \\\\{}\\{}\\tmp\\{} &amp; net use \\\\{}\\{} /del</Arguments>".format(command, local_ip, alea, tmpFileName, local_ip, alea)
             else:
-                argument_xml = "      <Arguments>/C {} &gt; %windir%\\Temp\\{} &amp; popd</Arguments>".format(command, tmpFileName)
-
+                argument_xml = "      <Arguments>/C {} &gt; %windir%\\Temp\\{} &amp; net use \\\\{}\\{} /del</Arguments>".format(command, tmpFileName, local_ip, alea)
 
         elif self.__retOutput is False:
             argument_xml = "      <Arguments>/C {}</Arguments>".format(command)
@@ -119,7 +120,7 @@ class TSCH_EXEC:
 """
         return xml
 
-    def doStuff(self, command, fileless=False):
+    def doStuff(self, command, alea, fileless=False):
 
         dce = self.__rpctransport.get_dce_rpc()
 
@@ -129,7 +130,7 @@ class TSCH_EXEC:
         tmpName = gen_random_string(8)
         tmpFileName = tmpName + '.tmp'
 
-        xml = self.gen_xml(command, tmpFileName, fileless)
+        xml = self.gen_xml(command, alea, tmpFileName, fileless)
 
         taskCreated = False
         logging.debug('Creating task \\%s' % tmpName)

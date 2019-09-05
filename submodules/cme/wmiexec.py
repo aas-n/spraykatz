@@ -93,9 +93,10 @@ class WMIEXEC:
     def execute_fileless(self, data, alea):
         self.__output = gen_random_string(6)
         local_ip = self.__smbconnection.getSMBServer().get_socket().getsockname()[0]
+        data = data.replace("ABCD", "^%")
+        data = data.replace("EFGH", "^%")
         command = self.__shell + data + ' 1> \\\\{}\\{}\\tmp\\{} 2>&1 & net use \\\\{}\\{} /del'.format(local_ip, alea, self.__output, local_ip, alea)
         logging.debug('Executing command: ' + command)
-        print(command)
         self.__win32Process.Create(command, self.__pwd, None)
         self.get_output_fileless()
 
