@@ -7,6 +7,7 @@
 # Imports
 import os, sys, logging, time
 from core.Utils import *
+from core.Colors import *
 from impacket.dcerpc.v5 import tsch, transport
 from impacket.dcerpc.v5.dtypes import NULL
 
@@ -110,7 +111,7 @@ class TSCH_EXEC:
         elif self.__retOutput is False:
             argument_xml = "      <Arguments>/C {}</Arguments>".format(command)
 
-        logging.debug('Generated argument XML: ' + argument_xml)
+        logging.debug("%sGenerated argument XML: %s" % (debugBlue, argument_xml))
         xml += argument_xml
 
         xml += """
@@ -133,23 +134,23 @@ class TSCH_EXEC:
         xml = self.gen_xml(command, alea, tmpFileName, fileless)
 
         taskCreated = False
-        logging.debug('Creating task \\%s' % tmpName)
+        logging.debug("%sCreating task \\%s" % (debugBlue, tmpName))
         tsch.hSchRpcRegisterTask(dce, '\\%s' % tmpName, xml, tsch.TASK_CREATE, NULL, tsch.TASK_LOGON_NONE)
         taskCreated = True
 
-        logging.debug('Running task \\%s' % tmpName)
+        logging.debug("%sRunning task \\%s" % (debugBlue, tmpName))
         tsch.hSchRpcRun(dce, '\\%s' % tmpName)
 
         done = False
         while not done:
-            logging.debug('Calling SchRpcGetLastRunInfo for \\%s' % tmpName)
+            logging.debug("%sCalling SchRpcGetLastRunInfo for \\%s" % (debugBlue, tmpName))
             resp = tsch.hSchRpcGetLastRunInfo(dce, '\\%s' % tmpName)
             if resp['pLastRuntime']['wYear'] != 0:
                 done = True
             else:
                 time.sleep(2)
 
-        logging.debug('Deleting task \\%s' % tmpName)
+        logging.debug("%sDeleting task \\%s" % (debugBlue, tmpName))
         tsch.hSchRpcDelete(dce, '\\%s' % tmpName)
         taskCreated = False
 

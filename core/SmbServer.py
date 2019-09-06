@@ -15,9 +15,15 @@ from core.Colors import *
 from core.Paths import *
 
 
-def launchSmbServer(q, local_ip, alea):
+def launchSmbServer(q, local_ip, alea, verbosity):
+    logging.warning("%sStarting SMB Server..." % (warningGre))
+
+    if verbosity == "debug":
+        logging.getLogger().setLevel(logging.DEBUG)
+    else:
+        logging.getLogger().setLevel(logging.WARNING)
+
     try:
-        logging.warning("%sStarting SMB Server." % (warningGre))
         server = smbserver.SimpleSMBServer(local_ip, 445)
         server.addShare(alea, "misc", "")
         server.setSMB2Support(True)
@@ -27,6 +33,7 @@ def launchSmbServer(q, local_ip, alea):
         server.setSMBChallenge('')
         server.start()
     except KeyboardInterrupt:
+        pass
         logging.warning("%s   Keyboard interrupt. Exiting SMB Server..." % (warningRed))
     except Exception as e:
         logging.warning("%s   Error: %s" % (warningRed, e))

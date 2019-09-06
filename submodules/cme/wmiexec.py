@@ -7,6 +7,7 @@
 # Imports
 import os, sys, logging, ntpath, time
 from core.Utils import *
+from core.Colors import *
 from impacket.dcerpc.v5.dcomrt import DCOMConnection
 from impacket.dcerpc.v5.dcom import wmi
 from impacket.dcerpc.v5.dtypes import NULL
@@ -86,7 +87,7 @@ class WMIEXEC:
         command = self.__shell + data
         if self.__retOutput:
             command += ' 1> ' + '\\\\127.0.0.1\\%s' % self.__share + self.__output  + ' 2>&1'
-        logging.debug('Executing command: ' + command)
+        logging.debug("%sExecuting command: %s" %  (debugBlue, command))
         self.__win32Process.Create(command, self.__pwd, None)
         self.get_output_remote()
 
@@ -96,7 +97,7 @@ class WMIEXEC:
         data = data.replace("ABCD", "^%")
         data = data.replace("EFGH", "^%")
         command = self.__shell + data + ' 1> \\\\{}\\{}\\tmp\\{} 2>&1 & net use \\\\{}\\{} /del'.format(local_ip, alea, self.__output, local_ip, alea)
-        logging.debug('Executing command: ' + command)
+        logging.debug("%sExecuting command: %s" % (debugBlue, command))
         self.__win32Process.Create(command, self.__pwd, None)
         self.get_output_fileless()
 

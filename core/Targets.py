@@ -29,7 +29,7 @@ def listPwnableTargets(args_targets, user):
 	for smbTarget in listSmbTargets(args_targets):
 		try:
 			if invoke_checklocaladminaccess(smbTarget, user.domain, user.username, user.password, user.lmhash, user.nthash):
-				logging.info("%s   %s is %spwnable%s!" % (infoYellow, smbTarget, green, white))
+				logging.info("%s%s is %spwnable%s!" % (infoYellow, smbTarget, green, white))
 				pwnableTargets.append(smbTarget)
 		except Exception as e:
 			logging.warning("%sError: %s" % (warningRed, e))

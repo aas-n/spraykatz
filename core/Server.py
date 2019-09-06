@@ -14,8 +14,8 @@ from core.SmbServer import *
 from core.DavServer import *
 
 
-def launchServer(q, local_ip, alea, server):
+def launchServer(q, local_ip, alea, verbosity, server):
     if server is "smb":
-        launchSmbServer(q, local_ip, alea)
+        launchSmbServer(q, local_ip, alea, verbosity)
     else:
-        launchDavServer(q, local_ip, alea)
+        launchDavServer(q, local_ip, alea, verbosity)

