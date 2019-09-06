@@ -9,7 +9,7 @@
 <h4 align="center">Spray love around the world</h4>
 <p align="center">
   <a href="https://github.com/aas-n/spraykatz">
-    <img src="https://img.shields.io/badge/release-1.0.0-green.svg">
+    <img src="https://img.shields.io/badge/Release-0.8-green.svg">
   </a>
   <a href="https://twitter.com/lydericlefebvre">
     <img src="https://img.shields.io/badge/Twitter-%40lydericlefebvre-blue.svg">
@@ -27,8 +27,7 @@
 ### About 
 Spraykatz is a tool without any pretention able to **retrieve credentials** on large Active Directory networks.
 
-It simply tries to __filelessly procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
-
+It simply tries to __procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
 
 ### Installation
 This tool is written for **`python3.6`**. You have to use python3.6 and pip3.6.
@@ -63,11 +62,11 @@ A quick start could be:
 #### Optional arguments
 | Switches | Description |
 | -------|:--------|
+| -k, --keep | Keep dumps into misc/dumps (no deletion when spraykatz ends). |
 | -m, --methods | Execution method to use. If omitted, wmiexec is tried first, then atexec, and  then smbexec. |
-| -P, --ports | Specify a web port to interact with aimed machines. (default: 80, need root). |
-| -s, --share | SMB Share to use for command execution. By default: `C$`. |
-| -w, --wait | Timeout for each procdump thread. Default: 50 seconds. A low timeout may give bad dumps. Do not hesitate to increase timeout in case of bad dumps. |
-| -q, --quiet | Quiet mode. Default is verbose. |
+| -s, --server | Specify the type of server to use. (default: smb). |
+| -v, --verbosity | Verbosity mode. |
+| -w, --wait | Timeout for each procdump thread. Default: 60 seconds. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps. |
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:
