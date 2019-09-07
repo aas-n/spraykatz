@@ -43,9 +43,9 @@ def menu():
     mandatoryArgs.add_argument("-t", "--targets", help="IP addresses and/or IP address ranges. You can submit them via a file of targets (one target per line), or inline (separated by commas).", required=True)
 
     optionalArgs = parser.add_argument_group('Optional Arguments')
-    optionalArgs.add_argument("-k", "--keep", help="Keep dumps into misc/dumps (no deletion when spraykatz ends).", action="store_true") 
+    optionalArgs.add_argument("-k", "--keep", help="Keep dumps into misc/dumps (no deletion when spraykatz ends).", action="store_true")
     optionalArgs.add_argument("-m", "--methods", help="Methods used for spraying. Can be wmiexec, atexec or smbexec. Default: wmiexec.", choices=['wmiexec', 'atexec', 'smbexec'], default=None)
-    optionalArgs.add_argument("-s", "--server", help="Specify the type of server to use. (default: smb).", choices=['smb'],  default="smb")
+    optionalArgs.add_argument("-s", "--server", help="Specify the type of server to use. (default: smb).", choices=['smb''],  default="smb") # TODO: SambaServer & DavServer
     optionalArgs.add_argument("-v", "--verbosity", help="Verbosity mode.", choices=['warning', 'info', 'debug'], default="info")
     optionalArgs.add_argument("-w", "--wait", help="Timeout for each procdump thread. Default: 60 seconds. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps.", default=60)
 

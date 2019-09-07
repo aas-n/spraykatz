@@ -18,13 +18,13 @@ from core.Colors import *
 from core.Utils import *
 from multiprocessing import Process, Queue
 
-
 def run(args):
     jobs = []
     q = Queue()
 
     user = User(args.domain, args.username, args.password)
     local_ip = retrieveMyIP()
+
     alea = gen_random_string(5).upper()
 
     server = Process(target=launchServer, args=(q, local_ip, alea, args.verbosity, args.server))

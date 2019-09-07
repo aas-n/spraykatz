@@ -21,7 +21,7 @@ def initSpraykatz():
         os.chmod(dumpDir, 0o777)
     return menu()
 
-def joinThreads(davServer, jobs, timeout):
+def joinThreads(server, jobs, timeout):
     start = cur_time = time.time()
     while cur_time <= (start + int(timeout)):
         for job in jobs:
@@ -41,13 +41,13 @@ def joinThreads(davServer, jobs, timeout):
 
     logging.debug("%sSpray threads terminated." % (debugBlue))
 
-    if davServer.is_alive():
-        davServer.terminate()
-        davServer.join()
+    if server.is_alive():
+        server.terminate()
+        server.join()
         logging.debug("%sServer thread terminated." % (debugBlue))
 
-def freeSpraykatz(davServer, jobs, timeout, keep):
-    joinThreads(davServer, jobs, timeout)
+def freeSpraykatz(server, jobs, timeout, keep):
+    joinThreads(server, jobs, timeout)
 
     if not keep:
         for f in os.listdir(tmpDir):
@@ -56,6 +56,6 @@ def freeSpraykatz(davServer, jobs, timeout, keep):
             os.remove(os.path.join(dumpDir, f))
 
 
-def exit_gracefully(davServer, jobs, keep):
+def exit_gracefully(server, jobs, keep):
     logging.warning("%sExiting Gracefully..." % (warningGre))
-    freeSpraykatz(davServer, jobs, 2, keep)
+    freeSpraykatz(server, jobs, 2, keep)

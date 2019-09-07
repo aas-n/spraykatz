@@ -11,7 +11,7 @@ import logging
 from impacket.dcerpc.v5.transport import DCERPCTransportFactory
 from impacket.dcerpc.v5.rpcrt import DCERPCException
 from impacket.dcerpc.v5.epm import MSRPC_UUID_PORTMAP
-
+from core.Colors import *
 
 def get_os_arch(target):
     try:
@@ -20,7 +20,7 @@ def get_os_arch(target):
         transport.set_connect_timeout(5)
         dce = transport.get_dce_rpc()
         dce.connect()
-        
+
         try:
             dce.bind(MSRPC_UUID_PORTMAP, transfer_syntax=('71710533-BEBA-4937-8319-B5DBEF9CCC36', '1.0'))
         except DCERPCException as e:
