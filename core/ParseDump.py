@@ -29,7 +29,7 @@ def parseDumps(dumpFolder):
             results[filename] = mimi
             logging.info("%s%s: %sdone%s." % (infoYellow, filename, green, white))
         except Exception as e:
-            logging.warning("%sParsing %sfailed%s on %s%s%s. Err: %s" % (warningRed, red, white, red, filename, white, e))
+            logging.info("%s%s: %sfailed%s. (Please see -w switch)" % (infoYellow, filename, red, white))
 
     for result in results:
         for luid in results[result].logon_sessions:

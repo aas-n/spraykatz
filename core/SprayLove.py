@@ -29,7 +29,7 @@ def sprayLove(user, target, methods, local_ip, alea):
             if smbConnection.create_conn_obj(target):
                 try:
                     exec_method = wmiexec.WMIEXEC(target, smb_share_name, user.username, user.password, user.domain, smbConnection.smbConnection, hashes=user.lmhash + ':' + user.nthash, share="C$")
-                    logging.info("%s%s: %swmiexec%s seems to be an %sOK%s method." % (infoYellow, target, green, white, green, white))
+                    logging.info("%s%s: %swmiexec%s seems to be an %sOK%s method. Fire!" % (infoYellow, target, green, white, green, white))
                     break
                 except Exception as e:
                     logging.info("%s%s: %swmiexec%s seems to be an %sKO%s method." % (infoYellow, target, red, white, red, white))
@@ -40,7 +40,7 @@ def sprayLove(user, target, methods, local_ip, alea):
         elif method == 'atexec':
             try:
                 exec_method = atexec.TSCH_EXEC(target, smb_share_name, user.username, user.password, user.domain, user.lmhash + ':' + user.nthash)
-                logging.info("%s%s: %satexec%s seems to be an %sOK%s method." % (infoYellow, target, green, white, green, white))
+                logging.info("%s%s: %satexec%s seems to be an %sOK%s method. Fire!" % (infoYellow, target, green, white, green, white))
                 break
             except Exception as e:
                 logging.info("%s%s: %satexec%s seems to be an %sKO%s method." % (infoYellow, target, red, white, red, white))
@@ -49,7 +49,7 @@ def sprayLove(user, target, methods, local_ip, alea):
         else:
             try:
                 exec_method = smbexec.SMBEXEC(target, smb_share_name, 445, user.username, user.password, user.domain, user.lmhash + ':' + user.nthash, "C$")
-                logging.info("%s%s: %ssmbexec%s seems to be an %sOK%s method." % (infoYellow, target, green, white, green, white))
+                logging.info("%s%s: %ssmbexec%s seems to be an %sOK%s method. Fire!" % (infoYellow, target, green, white, green, white))
                 break
             except Exception as e:
                 logging.info("%s%s: %ssmbexec%s seems to be an %sKO%s method." % (infoYellow, target, red, white, red, white))

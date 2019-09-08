@@ -16,19 +16,20 @@ from helpers import invoke_checklocaladminaccess
 
 def listSmbTargets(args_targets):
     smbTargets = Popen("nmap -T3 -sT -Pn -n --open -p135 -oG - %s | grep \"135/open\" | cut -d \" \" -f 2" % (' '.join(args_targets)), stdout=PIPE, shell=True).communicate()[0].decode("utf8").strip().split()
-#    smbTargets = Popen("nmap -T4 -Pn -n --open -p135 -oG - %s | awk '$NF~/msrpc/{print $2}'" % (' '.join(args_targets)), stdout=PIPE, shell=True).communicate()[0].decode("utf8").strip().split()
+    logging.debug("%sTargets found with nmap: %s" % (debugBlue, smbTargets))
+
     if not smbTargets:
         logging.warning("%sNo targets with open port 135 available. Quitting." % (warningRed))
-        exit(2)
-    print(smbTargets)
+        exit(2) 
     return smbTargets
 
 def listPwnableTargets(args_targets, user):
     logging.warning("%sListing targetable machines into networks provided. Can take a while..." % (warningGre))
     pwnableTargets = []
+
     targets = listSmbTargets(args_targets)
 
-    logging.warning("%sChecking local admin access targets..." % (warningGre))
+    logging.warning("%sChecking local admin access on targets..." % (warningGre))
     for smbTarget in targets:
         with timeout(1):
             try:
