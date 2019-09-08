@@ -16,13 +16,13 @@ from pypykatz.pypykatz import pypykatz
 
 def parseDumps(dumpFolder):
     logging.warning("%sParsing every minidump of %smisc/dumps%s..." % (warningGre, green, white))
-    
+
     credentials = []
     results = {}
     dico = {}
-    
+
     globdata = os.path.join(dumpDir, '*.dmp')
-    
+
     for filename in glob.glob(globdata):
         try:
             mimi = pypykatz.parse_minidump_file(filename)
@@ -30,48 +30,51 @@ def parseDumps(dumpFolder):
             logging.info("%s%s: %sdone%s." % (infoYellow, filename, green, white))
         except Exception as e:
             logging.warning("%sParsing %sfailed%s on %s%s%s. Err: %s" % (warningRed, red, white, red, filename, white, e))
-        
+
     for result in results:
         for luid in results[result].logon_sessions:
-            dico = results[result].logon_sessions[luid].to_dict()
-                
-            for cred in results[result].logon_sessions[luid].msv_creds:
-                if '$' not in cred.username:
-                    credentials.append((cred.domainname, cred.username, 'NA', (cred.LMHash.hex() if cred.LMHash else 'NA'), (cred.NThash.hex() if cred.NThash else 'NA')))
-                        
-            for cred in results[result].logon_sessions[luid].wdigest_creds:
-                if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
-                    credentials.append((cred.domainname, cred.username, cred.password, 'NA', 'NA'))
-                                
-            '''
-            for cred in results[result].logon_sessions[luid].ssp_creds:
-                if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
-                    credentials.append((cred.domainname, cred.username, cred.password, 'NA', 'NA'))
-            '''
-                        
-            for cred in results[result].logon_sessions[luid].livessp_creds:
-                if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
-                    credentials.append((cred.domainname, cred.username, cred.password, 'NA', 'NA'))
-                                
-            for cred in results[result].logon_sessions[luid].kerberos_creds:
-                if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
-                    credentials.append((cred.domainname, cred.username, cred.password, 'NA', 'NA'))
-                                
-            for cred in results[result].logon_sessions[luid].credman_creds:
-                if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
-                    credentials.append((cred.domain, cred.username, cred.password, 'NA', 'NA'))
-                                
-            for cred in results[result].logon_sessions[luid].tspkg_creds:
-                if cred.password and "TBAL" not in cred.password and '$' not in cred.domainname:
-                    credentials.append((cred.username, cred.domainname, cred.password, 'NA', 'NA'))
-                                
+            try:
+                dico = results[result].logon_sessions[luid].to_dict()
+
+                for cred in results[result].logon_sessions[luid].msv_creds:
+                    if '$' not in cred.username:
+                        credentials.append((cred.domainname, cred.username, 'NA', (cred.LMHash.hex() if cred.LMHash else 'NA'), (cred.NThash.hex() if cred.NThash else 'NA')))
+
+                for cred in results[result].logon_sessions[luid].wdigest_creds:
+                    if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
+                        credentials.append((cred.domainname, cred.username, cred.password, 'NA', 'NA'))
+
+                ''' Little bug with this one ?
+                for cred in results[result].logon_sessions[luid].ssp_creds:
+                    if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
+                        credentials.append((cred.domainname, cred.username, cred.password, 'NA', 'NA'))
+                '''
+
+                for cred in results[result].logon_sessions[luid].livessp_creds:
+                    if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
+                        credentials.append((cred.domainname, cred.username, cred.password, 'NA', 'NA'))
+
+                for cred in results[result].logon_sessions[luid].kerberos_creds:
+                    if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
+                        credentials.append((cred.domainname, cred.username, cred.password, 'NA', 'NA'))
+
+                for cred in results[result].logon_sessions[luid].credman_creds:
+                    if cred.password and "TBAL" not in cred.password and '$' not in cred.username:
+                        credentials.append((cred.domain, cred.username, cred.password, 'NA', 'NA'))
+
+                for cred in results[result].logon_sessions[luid].tspkg_creds:
+                    if cred.password and "TBAL" not in cred.password and '$' not in cred.domainname:
+                        credentials.append((cred.username, cred.domainname, cred.password, 'NA', 'NA'))
+            except Exception as e:
+                logging.warning("%sA problem occurs with target when accessing value (pypykatz). Err: %s" % (warningRed, e))
+
     credentials = list(skip_duplicates(credentials))
-        
+
     logging.warning("%sFollowing %scredentials%s were retrieved:" % (warningGre, green, white))
-        
+
     if not credentials:
         logging.warning("%s  No credentials found." % (warningRed))
-            
+
     for credential in credentials:
         print("")
         print("\t\t  domain: ", credential[0])

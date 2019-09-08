@@ -24,7 +24,7 @@ def printBanner():
 	print ("███████║██║     ██║  ██║██║  ██║   ██║   ██║  ██╗██║  ██║   ██║   ███████╗")
 	print ("╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝%sv0.8%s" % (green, white))
 	print ("                                                                          ")
-	print ("                    Written by %s@lydericlefebvre%s                       " % (red, white))
+	print ("                    Written by %s@lydericlefebvre%s (aas)                 " % (red, white))
 	print ("                                                                          ")
 
 

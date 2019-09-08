@@ -34,7 +34,7 @@ def launchSmbServer(q, local_ip, alea, verbosity):
         server.start()
     except KeyboardInterrupt:
         pass
-        logging.warning("%s   Keyboard interrupt. Exiting SMB Server..." % (warningRed))
+        #logging.warning("%s   Keyboard interrupt. Exiting SMB Server..." % (warningRed))
     except Exception as e:
         logging.warning("%s   Error: %s" % (warningRed, e))
         logging.warning("%s   A problem occurs when launching SMB server. Common problems:\n\t- port 445 is already in use ?\n\t- You don't have enough privileges" % (warningRed))

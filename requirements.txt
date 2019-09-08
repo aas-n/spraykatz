@@ -3,7 +3,7 @@ pexpect
 pyCryptodomex
 pyasn1
 pyOpenSSL
-pypykatz
+pypykatz>=0.2.0
 WsgiDAV
 cheroot
 lxml

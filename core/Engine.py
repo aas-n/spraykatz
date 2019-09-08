@@ -38,7 +38,7 @@ def run(args):
                 pass
         except queue.Empty:
             logging.info("%sServer launched successfully." % (infoYellow))
-            logging.warning("%sExec procdump on targets, and retrieve dumps locally into %smisc/dumps%s..." % (warningGre, green, white))
+            logging.warning("%sExec procdump on targets, and retrieve dumps locally into %smisc/dumps%s. Be patients..." % (warningGre, green, white))
 
             for target in targets:
                 jobs.append(Process(target=sprayLove, args=(user, target, args.methods, local_ip, alea)))
