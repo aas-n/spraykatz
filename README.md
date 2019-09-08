@@ -66,7 +66,7 @@ A quick start could be:
 | -m, --methods | Execution method to use. If omitted, wmiexec is tried first, then atexec, and  then smbexec. |
 | -s, --server | Specify the type of server to use. (default: smb). |
 | -v, --verbosity | Verbosity mode. |
-| -w, --wait | Timeout for each procdump thread. Default: 60 seconds. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps. |
+| -w, --wait | Timeout for each procdump thread. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps. Default: 15 seconds. |
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:
