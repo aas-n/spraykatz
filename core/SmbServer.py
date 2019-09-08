@@ -22,7 +22,7 @@ def launchSmbServer(q, local_ip, alea, verbosity):
         logging.getLogger().setLevel(logging.DEBUG)
     else:
         logging.getLogger().setLevel(logging.WARNING)
-
+    os.system("/etc/init.d/smbd stop")
     try:
         server = smbserver.SimpleSMBServer(local_ip, 445)
         server.addShare(alea, "misc", "")

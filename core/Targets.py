@@ -15,10 +15,12 @@ from helpers import invoke_checklocaladminaccess
 
 
 def listSmbTargets(args_targets):
-    smbTargets = Popen("nmap -T4 -Pn -n --open -p135 -oG - %s | awk '$NF~/msrpc/{print $2}'" % (' '.join(args_targets)), stdout=PIPE, shell=True).communicate()[0].decode("utf8").strip().split()
+    smbTargets = Popen("nmap -T3 -sT -Pn -n --open -p135 -oG - %s | grep \"135/open\" | cut -d \" \" -f 2" % (' '.join(args_targets)), stdout=PIPE, shell=True).communicate()[0].decode("utf8").strip().split()
+#    smbTargets = Popen("nmap -T4 -Pn -n --open -p135 -oG - %s | awk '$NF~/msrpc/{print $2}'" % (' '.join(args_targets)), stdout=PIPE, shell=True).communicate()[0].decode("utf8").strip().split()
     if not smbTargets:
         logging.warning("%sNo targets with open port 135 available. Quitting." % (warningRed))
         exit(2)
+    print(smbTargets)
     return smbTargets
 
 def listPwnableTargets(args_targets, user):

@@ -11,7 +11,7 @@ import os, logging, pexpect
 from core.Colors import *
 from core.Paths import *
 from core.SmbServer import *
-#from core.SambaServer import *
+from core.SambaServer import *
 from core.DavServer import *
 
 
