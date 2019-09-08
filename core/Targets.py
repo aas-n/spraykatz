@@ -11,6 +11,7 @@ import logging
 from core.Colors import *
 from core.Timeout import *
 from subprocess import Popen, PIPE
+from multiprocessing import Process, Manager
 from helpers import invoke_checklocaladminaccess
 
 
@@ -23,6 +24,16 @@ def listSmbTargets(args_targets):
         exit(2) 
     return smbTargets
 
+def listLocalAdminAccess(target, user, pwnableTargets):
+        with timeout(1):
+            try:
+                if invoke_checklocaladminaccess(target, user.domain, user.username, user.password, user.lmhash, user.nthash):
+                    logging.info("%s%s is %spwnable%s!" % (infoYellow, target, green, white))
+                    pwnableTargets.append(target)
+            except Exception as e:
+                logging.debug("%s%s: %s" % (debugBlue, target, e))
+                logging.info("%s%s is %snot pwnable%s!" % (infoYellow, target, red, white))
+
 def listPwnableTargets(args_targets, user):
     logging.warning("%sListing targetable machines into networks provided. Can take a while..." % (warningGre))
     pwnableTargets = []
@@ -30,18 +41,24 @@ def listPwnableTargets(args_targets, user):
     targets = listSmbTargets(args_targets)
 
     logging.warning("%sChecking local admin access on targets..." % (warningGre))
-    for smbTarget in targets:
-        with timeout(1):
-            try:
-                if invoke_checklocaladminaccess(smbTarget, user.domain, user.username, user.password, user.lmhash, user.nthash):
-                    logging.info("%s%s is %spwnable%s!" % (infoYellow, smbTarget, green, white))
-                    pwnableTargets.append(smbTarget)
-            except Exception as e:
-                logging.debug("%s%s: %s" % (debugBlue, smbTarget, e))
-                logging.info("%s%s is %snot pwnable%s!" % (infoYellow, smbTarget, red, white))
-
+    with Manager() as manager:
+        try:
+            managerTargets = manager.list()
+            processes = []
+            for smbTarget in targets:
+                p = Process(target=listLocalAdminAccess, args=(smbTarget, user, managerTargets))
+                p.start()
+                processes.append(p)
+        except Exception as e:
+	        logging.warning("%sErr: %s" (warningRed, e))
+        finally:
+            for p in processes:
+                p.join()
+                
+            pwnableTargets = [x for x in managerTargets]
+    
     if not pwnableTargets:
         logging.warning("%sNo pwnable targets. Quitting." % (warningRed))
         exit(2)
-
+    
     return pwnableTargets
