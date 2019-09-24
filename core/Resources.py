@@ -41,8 +41,6 @@ def freeSpraykatz(jobs, timeout, keep):
     joinThreads(jobs, timeout)
 
     if not keep:
-        for f in os.listdir(tmpDir):
-            os.remove(os.path.join(tmpDir, f))
         for f in os.listdir(dumpDir):
             os.remove(os.path.join(dumpDir, f))
 

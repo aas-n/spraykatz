@@ -12,7 +12,6 @@ import os, sys
 
 # Dirs
 homeDir = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])))
-tmpDir = os.path.join(homeDir, 'misc', 'tmp')
 dumpDir = os.path.join(homeDir, 'misc', 'dumps')
 
 # Submodules
