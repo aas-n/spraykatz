@@ -12,6 +12,7 @@ import os
 from core.Colors import *
 from core.Resources import *
 from core.Engine import *
+from core.Args import *
 
 def printBanner():
 	''' Print the tool banner '''
@@ -22,16 +23,16 @@ def printBanner():
 	print ("███████╗██████╔╝██████╔╝███████║ ╚████╔╝ █████╔╝ ███████║   ██║     ███╔╝ ")
 	print ("╚════██║██╔═══╝ ██╔══██╗██╔══██║  ╚██╔╝  ██╔═██╗ ██╔══██║   ██║    ███╔╝  ")
 	print ("███████║██║     ██║  ██║██║  ██║   ██║   ██║  ██╗██║  ██║   ██║   ███████╗")
-	print ("╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝%sv0.8.1%s" % (green, white))
+	print ("╚══════╝╚═╝     ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚══════╝%sv0.9.0%s" % (green, white))
 	print ("                                                                          ")
-	print ("                    Written by %s@lydericlefebvre%s (aas)                 " % (red, white))
+	print ("                    Written by %s@lydericlefebvre%s                       " % (red, white))
 	print ("                                                                          ")
 
 
 if __name__ == '__main__':
 	printBanner()
-	parser = initSpraykatz()
-	args = parseArgs(parser)
+	args = parseArgs(menu())
+	initSpraykatz()
 
 	# Fire!
 	run(args)

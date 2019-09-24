@@ -10,7 +10,7 @@
 import sys, os, argparse
 from core.Colors import *
 from core.Logs import *
-
+from core.Utils import *
 
 class SpraykatzParser(argparse.ArgumentParser):
     def error(self, message):
@@ -21,20 +21,18 @@ class SpraykatzParser(argparse.ArgumentParser):
 def parseArgs(parser):
     args = parser.parse_args()
 
-    if args.methods:
-        args.methods = args.methods.split(',')
-
     if os.path.isfile(args.targets):
         args.targets = [line.rstrip('\n') for line in open(args.targets)]
     else:
         args.targets = args.targets.split(',')
-
+    targets = list(skip_duplicates(args.targets))
+    args.targets = targets
     setLogging(args.verbosity)
 
     return args
 
 def menu():
-    parser = SpraykatzParser(prog="spraykatz.py", description="A tool to spray love around the world!", epilog="Example : ./spraykatz.py -d domain.local -u localadmin -p L0c4l4dm1n -t 192.168.0.0/24")
+    parser = SpraykatzParser(prog="spraykatz.py", description="A tool to spray love around the world!", epilog="=> Be careful, dumps are retrieved locally! A dump > 40MB. Ten dumps > 400MB.")
 
     mandatoryArgs = parser.add_argument_group('Mandatory Arguments')
     mandatoryArgs.add_argument("-d", "--domain", help="User's domain. If he is not member of a domain, simply use -d . instead.", required=True, default=".")
@@ -44,9 +42,7 @@ def menu():
 
     optionalArgs = parser.add_argument_group('Optional Arguments')
     optionalArgs.add_argument("-k", "--keep", help="Keep dumps into misc/dumps (no deletion when spraykatz ends).", action="store_true")
-    optionalArgs.add_argument("-m", "--methods", help="Methods used for spraying. Can be wmiexec, atexec or smbexec. Default: wmiexec.", choices=['wmiexec', 'atexec', 'smbexec'], default=None)
-    optionalArgs.add_argument("-s", "--server", help="Specify the type of server to use. (default: smb).", choices=['smb'],  default="smb")
     optionalArgs.add_argument("-v", "--verbosity", help="Verbosity mode.", choices=['warning', 'info', 'debug'], default="info")
-    optionalArgs.add_argument("-w", "--wait", help="Timeout for each procdump thread. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps. Default: 15 seconds.", default=15)
+    optionalArgs.add_argument("-w", "--wait", help="Timeout for each procdump thread. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps. Default: 30 seconds.", default=30)
 
     return parser

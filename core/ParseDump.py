@@ -85,3 +85,4 @@ def parseDumps(dumpFolder):
             print("\t\t  lmhash:  %s%s%s" % (green, credential[3], white))
         if credential[4] is not 'NA':
             print("\t\t  nthash:  %s%s%s" % (green, credential[4], white))
+        print("")

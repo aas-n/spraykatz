@@ -11,17 +11,13 @@ import os, logging, time
 from core.Paths import *
 from core.Args import *
 from core.Colors import *
-
+from core.Logs import *
 
 def initSpraykatz():
-    if not os.path.isdir(tmpDir) : os.mkdir(tmpDir)
+    logging.warning("%sHey, did you read the code?\n" % (debugBlue))
     if not os.path.isdir(dumpDir) : os.mkdir(dumpDir)
-    if os.getuid() == 0:
-        os.chmod(tmpDir, 0o777)
-        os.chmod(dumpDir, 0o777)
-    return menu()
 
-def joinThreads(server, jobs, timeout):
+def joinThreads(jobs, timeout):
     start = cur_time = time.time()
     while cur_time <= (start + int(timeout)):
         for job in jobs:
@@ -41,13 +37,8 @@ def joinThreads(server, jobs, timeout):
 
     logging.debug("%sSpray threads terminated." % (debugBlue))
 
-    if server.is_alive():
-        server.terminate()
-        server.join()
-        logging.debug("%sServer thread terminated." % (debugBlue))
-
-def freeSpraykatz(server, jobs, timeout, keep):
-    joinThreads(server, jobs, timeout)
+def freeSpraykatz(jobs, timeout, keep):
+    joinThreads(jobs, timeout)
 
     if not keep:
         for f in os.listdir(tmpDir):
@@ -56,6 +47,6 @@ def freeSpraykatz(server, jobs, timeout, keep):
             os.remove(os.path.join(dumpDir, f))
 
 
-def exit_gracefully(server, jobs, keep):
+def exit_gracefully(jobs, keep):
     logging.warning("%sExiting Gracefully..." % (warningGre))
-    freeSpraykatz(server, jobs, 2, keep)
+    freeSpraykatz(jobs, 2, keep)

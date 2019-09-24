@@ -56,6 +56,7 @@ def listPwnableTargets(args_targets, user):
                 p.join()
                 
             pwnableTargets = [x for x in managerTargets]
+            pwnableTargets = args_targets
     
     if not pwnableTargets:
         logging.warning("%sNo pwnable targets. Quitting." % (warningRed))

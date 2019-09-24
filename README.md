@@ -9,7 +9,7 @@
 <h4 align="center">Spray love around the world</h4>
 <p align="center">
   <a href="https://github.com/aas-n/spraykatz">
-    <img src="https://img.shields.io/badge/Release-0.8.1-green.svg">
+    <img src="https://img.shields.io/badge/Release-0.9.0-green.svg">
   </a>
   <a href="https://twitter.com/lydericlefebvre">
     <img src="https://img.shields.io/badge/Twitter-%40lydericlefebvre-blue.svg">
@@ -25,12 +25,12 @@
 | [Acknowlegments](#acknowlegments)  | Acknowlegments |
 
 ### About 
-Spraykatz is a tool without any pretention able to **retrieve credentials** on large Active Directory networks.
+Spraykatz is a tool without any pretention able to **retrieve credentials** on Windows machines and large Active Directory environments.
 
 It simply tries to __procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
 
 ### Installation
-This tool is written for **`python3.6`**. You have to use python3.6 and pip3.6.
+This tool is written for **`python>=3.6`**.
 #### Ubuntu
 On a fresh updated Ubuntu.
 ```bash
@@ -63,17 +63,14 @@ A quick start could be:
 | Switches | Description |
 | -------|:--------|
 | -k, --keep | Keep dumps into misc/dumps (no deletion when spraykatz ends). |
-| -m, --methods | Execution method to use. If omitted, wmiexec is tried first, then atexec, and  then smbexec. |
-| -s, --server | Specify the type of server to use. (default: smb). |
-| -v, --verbosity | Verbosity mode. |
-| -w, --wait | Timeout for each procdump thread. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps. Default: 15 seconds. |
+| -v, --verbosity | Verbosity mode {warning, info, debug}. Default: info. |
+| -w, --wait | Timeout for each procdump thread. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps. Default: 30 seconds. |
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:
 * [Mimikatz](https://github.com/gentilkiwi/mimikatz)
 * [Impacket](https://github.com/SecureAuthCorp/impacket)
 * [Pypykatz](https://github.com/skelsec/pypykatz)
-* [CrackMapExec](https://github.com/byt3bl33d3r/CrackMapExec)
 * [Pywerview](https://github.com/the-useless-one/pywerview)
 * [Sysinternals](https://docs.microsoft.com/en-us/sysinternals/downloads/)
 

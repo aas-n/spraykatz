@@ -1,9 +1,6 @@
-gevent
-pexpect
 pyCryptodomex
 pyasn1
 pyOpenSSL
 pypykatz>=0.2.0
-WsgiDAV
 cheroot
 lxml
