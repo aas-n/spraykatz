@@ -18,9 +18,10 @@
 # Reference for:
 #  DCOM
 #
+#########################
+#########################
+# This file comes from Impacket project and has been slightly modified for Spraykatz.
 #
-# This file comes from Pywerview project by Yannick Méheut [yannick (at) meheut (dot) org] - Copyright © 2016
-# Slightly modified for Spraykatz.
 #
 # Imports
 from __future__ import division
