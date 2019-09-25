@@ -26,11 +26,17 @@ def setLogging(verbosity):
 	logging.getLogger().addHandler(ch)
 
 @contextmanager
-def suppress_stdout():
+def suppress_std():
+    old_logger = logging.getLogger().getEffectiveLevel()
+    logging.getLogger().setLevel(logging.CRITICAL)
     with open(os.devnull, "w") as devnull:
         old_stdout = sys.stdout
+        old_stderr = sys.stderr
         sys.stdout = devnull
+        sys.stderr = devnull
         try:  
             yield
         finally:
             sys.stdout = old_stdout
+            sys.stderr = old_stderr
+            logging.getLogger().setLevel(old_logger)

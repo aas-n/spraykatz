@@ -39,7 +39,7 @@ def listPwnableTargets(args_targets, user):
     pwnableTargets = []
 
     targets = listSmbTargets(args_targets)
-
+    
     logging.warning("%sChecking local admin access on targets..." % (warningGre))
     with Manager() as manager:
         try:
@@ -56,7 +56,6 @@ def listPwnableTargets(args_targets, user):
                 p.join()
                 
             pwnableTargets = [x for x in managerTargets]
-            pwnableTargets = args_targets
     
     if not pwnableTargets:
         logging.warning("%sNo pwnable targets. Quitting." % (warningRed))
