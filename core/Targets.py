@@ -13,11 +13,15 @@ from core.Timeout import *
 from subprocess import Popen, PIPE
 from multiprocessing import Process, Manager
 from helpers import invoke_checklocaladminaccess
-
+from impacket.smbconnection import SessionError
 
 def listSmbTargets(args_targets):
-    smbTargets = Popen("nmap -T3 -sT -Pn -n --open -p135 -oG - %s | grep \"135/open\" | cut -d \" \" -f 2" % (' '.join(args_targets)), stdout=PIPE, shell=True).communicate()[0].decode("utf8").strip().split()
-    logging.debug("%sTargets found with nmap: %s" % (debugBlue, smbTargets))
+    try:
+
+        smbTargets = Popen("nmap -T3 -sT -Pn -n --open -p135 -oG - %s | grep \"135/open\" | cut -d \" \" -f 2" % (' '.join(args_targets)), stdout=PIPE, shell=True).communicate()[0].decode("utf8").strip().split()
+        logging.debug("%sTargets found with nmap: %s" % (debugBlue, smbTargets))
+    except Exception as e:
+        logging.info("%s%s" % (e))
 
     if not smbTargets:
         logging.warning("%sNo targets with open port 135 available. Quitting." % (warningRed))
@@ -25,14 +29,16 @@ def listSmbTargets(args_targets):
     return smbTargets
 
 def listLocalAdminAccess(target, user, pwnableTargets):
-        with timeout(1):
+        with timeout(5):
             try:
                 if invoke_checklocaladminaccess(target, user.domain, user.username, user.password, user.lmhash, user.nthash):
                     logging.info("%s%s is %spwnable%s!" % (infoYellow, target, green, white))
                     pwnableTargets.append(target)
+            except SessionError as e:
+                error, desc = e.getErrorString()
+                logging.info("%s%s is %snot pwnable%s! (%s)" % (infoYellow, target, red, white, error))
             except Exception as e:
-                logging.debug("%s%s: %s" % (debugBlue, target, e))
-                logging.info("%s%s is %snot pwnable%s!" % (infoYellow, target, red, white))
+                logging.info("%s%s is %snot pwnable%s! (%s)" % (infoYellow, target, red, white, e))
 
 def listPwnableTargets(args_targets, user):
     logging.warning("%sListing targetable machines into networks provided. Can take a while..." % (warningGre))

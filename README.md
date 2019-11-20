@@ -9,12 +9,18 @@
 <h4 align="center">Spray love around the world</h4>
 <p align="center">
   <a href="https://github.com/aas-n/spraykatz">
-    <img src="https://img.shields.io/badge/Release-0.9.3-green.svg">
+    <img src="https://img.shields.io/badge/Release-0.9.4-green.svg">
   </a>
   <a href="https://twitter.com/lydericlefebvre">
     <img src="https://img.shields.io/badge/Twitter-%40lydericlefebvre-blue.svg">
   </a>
+  <a href="https://akerva.com">
+    <img src="https://img.shields.io/badge/Akerva-red.svg">
+  </a>
 </p>
+
+
+https://akerva.com/
 
 ### Index
 | Title        | Description   |
@@ -30,7 +36,7 @@ Spraykatz is a tool without any pretention able to **retrieve credentials** on W
 It simply tries to __procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
 
 ### Installation
-This tool is written for **`python>=3.6`**.
+This tool is written for **`python>=3`**. Do not use this on production environments!
 #### Ubuntu
 On a fresh updated Ubuntu.
 ```bash
@@ -54,7 +60,6 @@ A quick start could be:
 #### Mandatory arguments
 | Switches | Description |
 | -------|:--------|
-| -d, --domain | User's domain. If he is **not** member of a domain, simply use `-d .` instead. |
 | -u, --username | User to spray with. He must have admin rights on targeted systems in order to gain remote code execution. |
 | -p, --password | User's password or NTLM hash in the `LM:NT` format. |
 | -t, --targets | IP addresses and/or IP address ranges. You can submit them via a file of targets (one target per line), or inline (separated by commas). |
@@ -62,9 +67,9 @@ A quick start could be:
 #### Optional arguments
 | Switches | Description |
 | -------|:--------|
+| -d, --domain | User's domain. If he is **not** member of a domain, simply use `-d .` instead. |
 | -k, --keep | Keep dumps into misc/dumps (no deletion when spraykatz ends). |
 | -v, --verbosity | Verbosity mode {warning, info, debug}. Default: info. |
-| -w, --wait | Timeout for each procdump thread. A low timeout may gives bad dumps. Do not hesitate to increase timeout in case of bad dumps. Default: 30 seconds. |
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:

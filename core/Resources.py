@@ -8,6 +8,7 @@
 
 # Imports
 import os, logging, time
+from multiprocessing import Queue
 from core.Paths import *
 from core.Args import *
 from core.Colors import *
@@ -19,6 +20,7 @@ def initSpraykatz():
 
 def joinThreads(jobs, timeout):
     start = cur_time = time.time()
+
     while cur_time <= (start + int(timeout)):
         for job in jobs:
             if not job.is_alive():
@@ -44,7 +46,6 @@ def freeSpraykatz(jobs, timeout, keep):
         for f in os.listdir(dumpDir):
             os.remove(os.path.join(dumpDir, f))
 
-
-def exit_gracefully(jobs, keep):
+def exit_gracefully(jobs, timeout, keep):
     logging.warning("%sExiting Gracefully..." % (warningGre))
-    freeSpraykatz(jobs, 2, keep)
+    freeSpraykatz(jobs, timeout, keep)

