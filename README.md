@@ -15,7 +15,7 @@
     <img src="https://img.shields.io/badge/Twitter-%40lydericlefebvre-blue.svg">
   </a>
   <a href="https://akerva.com">
-    <img src="https://img.shields.io/badge/Akerva-red.svg">
+    <img src="https://img.shields.io/badge/Thanks-Akerva-red.svg">
   </a>
 </p>
 
