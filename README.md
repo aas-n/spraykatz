@@ -20,8 +20,6 @@
 </p>
 
 
-https://akerva.com/
-
 ### Index
 | Title        | Description   |
 | ------------- |:-------------|
