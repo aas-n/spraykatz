@@ -66,7 +66,7 @@ A quick start could be:
 | Switches | Description |
 | -------|:--------|
 | -d, --domain | User's domain. If he is **not** member of a domain, simply use `-d .` instead. |
-| -v, --verbosity | Verbosity mode {warning, info, debug}. Default is info. |
+| -v, --verbosity | Verbosity mode {warning, info, debug}. Default == info. |
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:
