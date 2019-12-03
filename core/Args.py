@@ -32,7 +32,7 @@ def parseArgs(parser):
     return args
 
 def menu():
-    parser = SpraykatzParser(prog="spraykatz.py", description="A tool to spray love around the world!", epilog="=> Be careful, dumps are retrieved locally! A dump > 40MB. Ten dumps > 400MB.")
+    parser = SpraykatzParser(prog="spraykatz.py", description="A tool to spray love around the world!", epilog="=> Do not use this on production environments!")
     mandatoryArgs = parser.add_argument_group('Mandatory Arguments')
     mandatoryArgs.add_argument("-u", "--username", help="User to spray with. He must have admin rights on targeted systems in order to gain remote code execution.", required=True)
     mandatoryArgs.add_argument("-p", "--password", help="User's password or NTLM hash in the LM:NT format.", required=True)
@@ -40,7 +40,6 @@ def menu():
 
     optionalArgs = parser.add_argument_group('Optional Arguments')
     optionalArgs.add_argument("-d", "--domain", help="User's domain. If he is not member of a domain, simply use \"-d .\" instead.", default="")
-    optionalArgs.add_argument("-k", "--keep", help="Keep dumps into misc/dumps (no deletion when spraykatz ends).", action="store_true")
-    optionalArgs.add_argument("-v", "--verbosity", help="Verbosity mode.", choices=['warning', 'info', 'debug'], default="info")
+    optionalArgs.add_argument("-v", "--verbosity", help="Verbosity mode. Default is info.", choices=['warning', 'info', 'debug'], default="info")
 
     return parser

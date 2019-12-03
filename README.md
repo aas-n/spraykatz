@@ -9,7 +9,7 @@
 <h4 align="center">Spray love around the world</h4>
 <p align="center">
   <a href="https://github.com/aas-n/spraykatz">
-    <img src="https://img.shields.io/badge/Release-0.9.4-green.svg">
+    <img src="https://img.shields.io/badge/Release-0.9.5-green.svg">
   </a>
   <a href="https://twitter.com/lydericlefebvre">
     <img src="https://img.shields.io/badge/Twitter-%40lydericlefebvre-blue.svg">
@@ -31,7 +31,7 @@
 ### About 
 Spraykatz is a tool without any pretention able to **retrieve credentials** on Windows machines and large Active Directory environments.
 
-It simply tries to __procdump__ machines and __parse dumps locally__ in order to **avoid detections** by antivirus softwares as much as possible.
+It simply tries to __procdump__ machines and __parse dumps remotely__ in order to **avoid detections** by antivirus softwares as much as possible.
 
 ### Installation
 This tool is written for **`python>=3`**. Do not use this on production environments!
@@ -48,7 +48,7 @@ pip3 install -r requirements.txt
 ### Using Spraykatz
 A quick start could be:
 ```bash
-./spraykatz.py -d company.local -u H4x0r -p L0c4L4dm1n -t 192.168.1.0/24
+./spraykatz.py -u H4x0r -p L0c4L4dm1n -t 192.168.1.0/24
 ```
 
 <h3 align="center">
@@ -66,8 +66,7 @@ A quick start could be:
 | Switches | Description |
 | -------|:--------|
 | -d, --domain | User's domain. If he is **not** member of a domain, simply use `-d .` instead. |
-| -k, --keep | Keep dumps into misc/dumps (no deletion when spraykatz ends). |
-| -v, --verbosity | Verbosity mode {warning, info, debug}. Default: info. |
+| -v, --verbosity | Verbosity mode {warning, info, debug}. Default is info. |
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:
@@ -76,6 +75,7 @@ Spraykatz uses slighlty modified parts of the following projects:
 * [Pypykatz](https://github.com/skelsec/pypykatz)
 * [Pywerview](https://github.com/the-useless-one/pywerview)
 * [Sysinternals](https://docs.microsoft.com/en-us/sysinternals/downloads/)
+* [hackndo](https://beta.hackndo.com/)
 
 #
 Written by [Lydéric Lefebvre](https://www.linkedin.com/in/lydericlefebvre/)

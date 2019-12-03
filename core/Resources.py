@@ -16,7 +16,6 @@ from core.Logs import *
 
 def initSpraykatz():
     logging.warning("%sHey, did you read the code?\n" % (debugBlue))
-    if not os.path.isdir(dumpDir) : os.mkdir(dumpDir)
 
 def joinThreads(jobs, timeout):
     start = cur_time = time.time()
@@ -39,13 +38,9 @@ def joinThreads(jobs, timeout):
 
     logging.debug("%sSpray threads terminated." % (debugBlue))
 
-def freeSpraykatz(jobs, timeout, keep):
+def freeSpraykatz(jobs, timeout):
     joinThreads(jobs, timeout)
 
-    if not keep:
-        for f in os.listdir(dumpDir):
-            os.remove(os.path.join(dumpDir, f))
-
-def exit_gracefully(jobs, timeout, keep):
+def exit_gracefully(jobs, timeout):
     logging.warning("%sExiting Gracefully..." % (warningGre))
-    freeSpraykatz(jobs, timeout, keep)
+    freeSpraykatz(jobs, timeout)

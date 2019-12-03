@@ -9,9 +9,10 @@
 # Imports
 from core.Colors import *
 
-def print_credentials(credentials):
+def print_credentials(target, credentials):
     for credential in credentials:
         print("")
+        print("\t\t machine: ", target)
         print("\t\t  domain: ", credential[0])
         print("\t\tusername: ", credential[1])
         if credential[2] is not 'NA':
@@ -21,3 +22,4 @@ def print_credentials(credentials):
         if credential[4] is not 'NA':
             print("\t\t  nthash:  %s%s%s" % (green, credential[4], white))
 
+    print("")
