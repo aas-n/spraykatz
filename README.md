@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/aas-n/spraykatz/"><img src="https://image.noelshack.com/fichiers/2019/24/7/1560693180-cat.png" alt="Spraykatz"></a>
+  <a href="https://github.com/aas-n/spraykatz/"><img src="https://i.ibb.co/W6Lj3PK/cat.png" alt="Spraykatz"></a>
   <br>
   Spraykatz
   <br>

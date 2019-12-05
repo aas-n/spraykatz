@@ -19,11 +19,15 @@ class Dump(object):
         self.__currentOffset = 0
         self.__tid = smbConnection.connectTree("C$")
         self.__fid = smbConnection.openFile(self.__tid, self.__fpath)
-        self.__buffer_data = {}
-        self.__buffer_data["offset"] = 0
-        self.__buffer_data["size"] = 0
-        self.__buffer_min_size = 4096
+        self.__fileInfo = smbConnection.queryInfo(self.__tid, self.__fid)
+        self.__endOfFile = self.__fileInfo.fields["EndOfFile"]
+        self.__buffer_min_size = 1024 * 8
         self.__total_read = 0
+        self.__buffer_data = {
+                "offset": 0,
+                "size": 0,
+                "buffer": ""
+        }
 
     def close(self):
         self.__smbConnection.closeFile(self.__tid, self.__fid)
@@ -43,8 +47,8 @@ class Dump(object):
                 self.__buffer_data["size"] = self.__buffer_min_size
                 self.__total_read += self.__buffer_min_size
             else:
-                value = self.__smbConnection.readFile(self.__tid, self.__fid, self.__currentOffset, size)
-                self.__buffer_data["size"] = size
+                value = self.__smbConnection.readFile(self.__tid, self.__fid, self.__currentOffset, size + self.__buffer_min_size)
+                self.__buffer_data["size"] = size + self.__buffer_min_size
                 self.__total_read += size
             
             self.__buffer_data["buffer"] = value
@@ -56,6 +60,12 @@ class Dump(object):
     def seek(self, offset, whence=0):
         if whence == 0:
             self.__currentOffset = offset
+        elif whence == 1:
+            self.__currentOffset += offset
+        elif whence == 2:
+            self.__currentOffset = self.__endOfFile - offset
+        else:
+            raise Exception('Seek function whence value must be between 0-2')
 
     def tell(self):
         return self.__currentOffset
