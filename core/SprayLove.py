@@ -22,5 +22,7 @@ def sprayLove(user, target, local_ip):
         exec_method = wmiexec.WMIEXEC(smbConnection, user.username, user.password, user.domain, user.lmhash, user.nthash)
         logging.warning("%sProcDumping %s%s%s. Be patient..." % (infoYellow, green, target, white))
         exec_method.run(target, get_os_arch(target))
+    except UnboundLocalError:
+        logging.info("%s%s: The dump cannot be opened. Check if ProcDump worked with -v debug." % (warningRed, target))
     except Exception as e:
         logging.info("%s%s: %s" % (infoYellow, target, e))

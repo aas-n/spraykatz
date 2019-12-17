@@ -13,7 +13,8 @@ def print_credentials(target, credentials):
     for credential in credentials:
         print("")
         print("\t\t machine: ", target)
-        print("\t\t  domain: ", credential[0])
+        if credential[0] is not 'NA':
+            print("\t\t  domain: ", credential[0])
         print("\t\tusername: ", credential[1])
         if credential[2] is not 'NA':
             print("\t\tpassword:  %s%s%s" % (green, credential[2], white))

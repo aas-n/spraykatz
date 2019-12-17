@@ -15,7 +15,10 @@ def write_credentials(target, credentials):
     credsFile = open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'results', 'creds.txt'), 'a')
     
     for credential in credentials:
-        credsFile.write("%s:%s:%s" % (target, credential[0], credential[1]))
+        credsFile.write("%s" % (target))
+        if credential[0] is not 'NA':
+            credsFile.write(":%s" % (credential[0]))
+        credsFile.write(":%s" % (credential[1]))
         if credential[2] is not 'NA':
             credsFile.write(":%s" % (credential[2]))
         else:

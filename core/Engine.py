@@ -31,7 +31,7 @@ def run(args):
             jobs.append(Process(target=sprayLove, args=(user, target, local_ip)))
             jobs[-1].start()
 
-        joinThreads(jobs, 30) # wait 30 seconds max
+        joinThreads(jobs, 180) # wait 3 minutes max
         logging.info("\n%sCredentials logged into: %s" % (warningGre, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'results', 'creds.txt')))
 
     except KeyboardInterrupt:
