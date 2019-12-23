@@ -78,4 +78,4 @@ Spraykatz uses slighlty modified parts of the following projects:
 * [hackndo](https://beta.hackndo.com/)
 
 #
-Written by [Lydéric Lefebvre](https://www.linkedin.com/in/lydericlefebvre/)
+Written by [Lydéric Lefebvre](https://twitter.com/lydericlefebvre)
