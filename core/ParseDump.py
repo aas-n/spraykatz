@@ -27,7 +27,8 @@ def parseDump(dump):
             dico = result.logon_sessions[luid].to_dict() 
 
             for cred in result.logon_sessions[luid].msv_creds:
-                credentials.append((cred.domainname, cred.username, 'NA', (cred.LMHash.hex() if cred.LMHash else 'NA'), (cred.NThash.hex() if cred.NThash else 'NA')))
+                if cred.username != None:
+                    credentials.append((cred.domainname, cred.username, 'NA', (cred.LMHash.hex() if cred.LMHash else 'NA'), (cred.NThash.hex() if cred.NThash else 'NA')))
 
             for cred in result.logon_sessions[luid].wdigest_creds:
                 if cred.password and type(cred.password) != bytes:
