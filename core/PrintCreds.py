@@ -22,5 +22,5 @@ def print_credentials(target, credentials):
             print("\nlmhash: \t%s%s%s" % (green, credential[3], white))
         if credential[4] is not 'NA':
             print("\t\t  nthash:  %s%s%s" % (green, credential[4], white))
-
+    
     print("")

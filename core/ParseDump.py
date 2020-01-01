@@ -13,9 +13,10 @@ from core.Paths import *
 from core.Utils import *
 from core.Dump import *
 from pypykatz.pypykatz import pypykatz
+import traceback
 
 
-def parseDump(dump):
+def parseDump(dump, target):
     credentials = []
     result = []
     dico = {}
@@ -61,7 +62,10 @@ def parseDump(dump):
                         credentials.append((cred.username, cred.domainname, cred.password, 'NA', 'NA'))
 
     except Exception as e:
-        logging.warning("%sA problem occurs with target when accessing value (pypykatz). Err: %s" % (warningRed, e))
+        logging.warning("%sA problem occurs during the parse of %s%s%s's dump. Err: %s." % (warningRed, red, target, white, e))
+        logging.debug("%s==== STACKTRACE ====" % (blue))
+        if logging.getLogger().getEffectiveLevel() <= 10: traceback.print_exc(file=sys.stdout)
+        logging.debug("%s==== STACKTRACE ====%s" % (blue, white))
 
     credentials = list(skip_duplicates(credentials))
 

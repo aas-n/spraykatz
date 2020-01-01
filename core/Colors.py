@@ -11,6 +11,7 @@ white = '\033[0m'
 green = '\033[92m'
 red = '\033[91m'
 yellow = '\033[93m'
+blue = '\033[94m'
 
 debugBlue = '\033[94m[#]\033[0m '
 warningRed = '\033[91m[-]\033[0m '

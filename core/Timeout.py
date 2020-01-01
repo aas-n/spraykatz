@@ -1,3 +1,12 @@
+# coding: utf-8
+
+# Author:	Lyderic LEFEBVRE
+# Twitter:	@lydericlefebvre
+# Mail:		lylefebvre.infosec@gmail.com
+# LinkedIn:	https://www.linkedin.com/in/lydericlefebvre
+
+
+# Imports
 import signal
 from contextlib import contextmanager
 
@@ -6,7 +15,7 @@ from contextlib import contextmanager
 def timeout(time):
     signal.signal(signal.SIGALRM, raise_timeout)
     signal.alarm(time)
-
+    
     try:
         yield
     except TimeoutError:
@@ -17,5 +26,3 @@ def timeout(time):
 
 def raise_timeout(signum, frame):
     raise TimeoutError
-
-

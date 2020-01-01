@@ -8,7 +8,6 @@
 
 # Imports
 import os, logging, time
-from multiprocessing import Queue
 from core.Paths import *
 from core.Args import *
 from core.Colors import *
