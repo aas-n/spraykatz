@@ -9,7 +9,7 @@
 <h4 align="center">Spray love around the world</h4>
 <p align="center">
   <a href="https://github.com/aas-n/spraykatz">
-    <img src="https://img.shields.io/badge/Release-0.9.7-green.svg">
+    <img src="https://img.shields.io/badge/Release-0.9.8-green.svg">
   </a>
   <a href="https://twitter.com/lydericlefebvre">
     <img src="https://img.shields.io/badge/Twitter-%40lydericlefebvre-blue.svg">
@@ -73,6 +73,10 @@ A quick start could be:
 
 ### Changelog
 ```
+Version 0.9.8
+=============
+- ProcDump binaries are not embedded anymore. Spraykatz ask for downloading them now.
+
 Version 0.9.7
 =============
 - adding the "-r" switch to remove procdump & dumps left behind, just in case.

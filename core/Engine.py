@@ -32,7 +32,7 @@ def run(args):
             jobs[-1].start()
 
         joinThreads(jobs, args.wait)
-        logging.info("\n%sCredentials logged into: %s" % (warningGre, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'results', 'creds.txt')))
+        logging.warning("\n%sCredentials logged into: %s" % (warningGre, os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'results', 'creds.txt')))
 
     except KeyboardInterrupt:
         logging.warning("%sKeyboard interrupt. Exiting." % (warningRed))

@@ -8,6 +8,7 @@
 
 # Imports
 import os, logging, time
+import wget, zipfile
 from core.Paths import *
 from core.Args import *
 from core.Colors import *
@@ -15,6 +16,27 @@ from core.Logs import *
 
 def initSpraykatz():
     logging.warning("%sHey, did you read the code?\n" % (debugBlue))
+
+    # Ensure procdump binaries are available to be used by Spraykatz.
+    procdumpPath = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'procdump')
+    procdumpZip = os.path.join(procdumpPath, 'procdump.zip')
+    procdump32 = os.path.join(procdumpPath, 'procdump32.exe')
+    procdump64 = os.path.join(procdumpPath, 'procdump64.exe')
+    if not os.path.isfile(procdump32) or not os.path.isfile(procdump64):
+        choices = ['y','yes','Y','Yes','YES']
+        choice = input("%sProcDump binaries have not been found. Do you want Spraykatz to download them? [y/N]" % (infoYellow)).lower()
+
+        if choice in choices:
+            url = 'https://download.sysinternals.com/files/Procdump.zip'
+            wget.download(url, procdumpZip)
+            with zipfile.ZipFile(procdumpZip, 'r') as zip_ref:
+                zip_ref.extractall(procdumpPath)
+            os.rename(os.path.join(procdumpPath, 'procdump.exe'), procdump32)
+            os.remove(procdumpZip)
+            logging.warning("\n")
+        else:
+            logging.warning("\n%sYou can manually download and put 'procdump32.exe' and 'procdump64.exe' into misc/procdump folder." % (warningRed))
+            sys.exit(2)
 
 def joinThreads(jobs, timeout):
     start = cur_time = time.time()
