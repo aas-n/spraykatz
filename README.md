@@ -76,7 +76,7 @@ A quick start could be:
 Version 0.9.7
 =============
 - adding the "-r" switch to remove procdump & dumps left behind, just in case.
-- adding the "-w" switch to tell Spraykatz a timeout before exiting gracefully.
+- adding the "-w" switch to specify a timeout before exiting gracefully.
 - Debug mode enhanced
 - Bugs fixes
 ```
