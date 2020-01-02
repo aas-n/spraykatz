@@ -87,11 +87,13 @@ Version 0.9.7
 
 ### Acknowlegments  
 Spraykatz uses slighlty modified parts of the following projects:
-* [Mimikatz](https://github.com/gentilkiwi/mimikatz)
 * [Impacket](https://github.com/SecureAuthCorp/impacket)
 * [Pypykatz](https://github.com/skelsec/pypykatz)
 * [Pywerview](https://github.com/the-useless-one/pywerview)
 * [Sysinternals](https://docs.microsoft.com/en-us/sysinternals/downloads/)
+
+Thanks:
+* [Gentil Kiwi](http://blog.gentilkiwi.com/)
 * [hackndo](https://beta.hackndo.com/)
 
 #
