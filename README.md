@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/Release-0.9.8-green.svg">
   </a>
   <a href="https://twitter.com/aas_s3curity">
-    <img src="https://img.shields.io/badge/Twitter-%40aas_s3curity-blue.svg">
+    <img src="https://img.shields.io/badge/Twitter-aas-blue.svg">
   </a>
   <a href="https://akerva.com">
     <img src="https://img.shields.io/badge/Thanks-Akerva-red.svg">
