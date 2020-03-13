@@ -11,8 +11,8 @@
   <a href="https://github.com/aas-n/spraykatz">
     <img src="https://img.shields.io/badge/Release-0.9.8-green.svg">
   </a>
-  <a href="https://twitter.com/lydericlefebvre">
-    <img src="https://img.shields.io/badge/Twitter-%40lydericlefebvre-blue.svg">
+  <a href="https://twitter.com/aas_s3curity">
+    <img src="https://img.shields.io/badge/Twitter-%40aas_s3curity-blue.svg">
   </a>
   <a href="https://akerva.com">
     <img src="https://img.shields.io/badge/Thanks-Akerva-red.svg">
