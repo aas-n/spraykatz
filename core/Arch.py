@@ -1,9 +1,6 @@
 # coding: utf-8
 
-# Author:       Lyderic LEFEBVRE
-# Twitter:      @lydericlefebvre
-# Mail:         lylefebvre.infosec@gmail.com
-# LinkedIn:     https://www.linkedin.com/in/lydericlefebvre
+# Author:       @aas_s3curity
 
 
 # Imports

@@ -21,7 +21,7 @@
 #########################
 #########################
 #
-# This file comes from Impacket project and has been slightly modified for Spraykatz by @lydericlefebvre.
+# This file comes from Impacket project and has been slightly modified for Spraykatz by @aas_s3curity.
 #
 #
 # Imports

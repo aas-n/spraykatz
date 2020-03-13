@@ -97,4 +97,4 @@ Thanks:
 * [hackndo](https://beta.hackndo.com/)
 
 #
-Written by [Lydéric Lefebvre](https://twitter.com/lydericlefebvre)
+Written by [aas](https://twitter.com/aas_s3curity)
