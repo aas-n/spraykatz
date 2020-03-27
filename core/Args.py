@@ -8,6 +8,7 @@ import sys, os, argparse
 from core.Colors import *
 from core.Logs import *
 from core.Utils import *
+import getpass
 
 class SpraykatzParser(argparse.ArgumentParser):
     def error(self, message):
@@ -17,6 +18,9 @@ class SpraykatzParser(argparse.ArgumentParser):
 
 def parseArgs(parser):
     args = parser.parse_args()
+
+    if not args.password:
+        args.password=getpass.getpass(prompt='Password: ', stream=None)
 
     if os.path.isfile(args.targets):
         args.targets = [line.rstrip('\n') for line in open(args.targets)]
@@ -32,7 +36,7 @@ def menu():
     parser = SpraykatzParser(prog="spraykatz.py", description="A tool to spray love around the world!", epilog="=> Do not use this on production environments!")
     mandatoryArgs = parser.add_argument_group('Mandatory Arguments')
     mandatoryArgs.add_argument("-u", "--username", help="User to spray with. He must have admin rights on targeted systems in order to gain remote code execution.", required=True)
-    mandatoryArgs.add_argument("-p", "--password", help="User's password or NTLM hash in the LM:NT format.", required=True)
+    mandatoryArgs.add_argument("-p", "--password", help="User's password or NTLM hash in the LM:NT format.")
     mandatoryArgs.add_argument("-t", "--targets", help="IP addresses and/or IP address ranges. You can submit them via a file of targets (one target per line), or inline (separated by commas).", required=True)
 
     optionalArgs = parser.add_argument_group('Optional Arguments')

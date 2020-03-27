@@ -27,8 +27,8 @@ def printBanner():
 
 
 if __name__ == '__main__':
-	printBanner()
 	args = parseArgs(menu())
+	printBanner()
 	initSpraykatz()
 
 	# Fire!
