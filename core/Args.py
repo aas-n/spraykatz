@@ -36,6 +36,7 @@ def menu():
     mandatoryArgs.add_argument("-t", "--targets", help="IP addresses and/or IP address ranges. You can submit them via a file of targets (one target per line), or inline (separated by commas).", required=True)
 
     optionalArgs = parser.add_argument_group('Optional Arguments')
+    optionalArgs.add_argument("-m", "--method", help="lsass dumping method.", choices=["wmi", "atexec"], default="wmi")
     optionalArgs.add_argument("-d", "--domain", help="User's domain. If he is not member of a domain, simply use \"-d .\" instead.", default="")
     optionalArgs.add_argument("-r", "--remove", help="Only try to remove ProcDump and dumps left behind on distant machines. Just in case.", action="store_true")
     optionalArgs.add_argument("-v", "--verbosity", help="Verbosity mode. Default is info.", choices=['warning', 'info', 'debug'], default="info")

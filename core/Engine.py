@@ -25,7 +25,7 @@ def run(args):
         logging.warning("%sLet's spray some love... Be patient." % (warningGre))
 
         for target in targets:
-            jobs.append(Process(target=sprayLove, args=(user, target, local_ip, args.remove)))
+            jobs.append(Process(target=sprayLove, args=(user, target, local_ip, args.remove, args.method)))
             jobs[-1].start()
 
         joinThreads(jobs, args.wait)
