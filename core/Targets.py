@@ -1,20 +1,18 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
-
 
 # Imports
 import logging
-from core.Colors import *
-from core.Timeout import *
+from core.Colors import debugBlue, warningRed, warningGre, infoYellow, green, white, red
+from core.Timeout import timeout
 from subprocess import Popen, PIPE
 from multiprocessing import Process, Manager
-from helpers import invoke_checklocaladminaccess
+from submodules.pywerview.helpers import invoke_checklocaladminaccess
 from impacket.smbconnection import SessionError
+
 
 def listSmbTargets(args_targets):
     try:
-
         smbTargets = Popen("nmap -T3 -sT -Pn -n --open -p135 -oG - %s | grep \"135/open\" | cut -d \" \" -f 2" % (' '.join(args_targets)), stdout=PIPE, shell=True).communicate()[0].decode("utf8").strip().split()
         logging.debug("%sTargets found with nmap: %s" % (debugBlue, smbTargets))
     except Exception as e:
@@ -32,7 +30,7 @@ def listLocalAdminAccess(target, user, pwnableTargets):
                     logging.info("%s%s is %spwnable%s!" % (infoYellow, target, green, white))
                     pwnableTargets.append(target)
             except SessionError as e:
-                error, desc = e.getErrorString()
+                error = e.getErrorString()
                 logging.info("%s%s is %snot pwnable%s! (%s)" % (infoYellow, target, red, white, error))
             except Exception as e:
                 logging.info("%s%s is %snot pwnable%s! (%s)" % (infoYellow, target, red, white, e))
@@ -53,7 +51,7 @@ def listPwnableTargets(args_targets, user):
                 p.start()
                 processes.append(p)
         except Exception as e:
-	        logging.warning("%sErr: %s" (warningRed, e))
+	        logging.warning("%sErr: %s" % (warningRed, e))
         finally:
             for p in processes:
                 p.join()

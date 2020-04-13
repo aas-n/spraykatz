@@ -1,12 +1,9 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
-
 
 # Imports
 import signal
 from contextlib import contextmanager
-
 
 @contextmanager
 def timeout(time):

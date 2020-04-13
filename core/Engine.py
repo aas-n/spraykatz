@@ -1,16 +1,14 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
 
-
 # Imports
-import logging, traceback
-from core.User import *
-from core.Resources import *
-from core.Targets import *
-from core.SprayLove import *
-from core.Colors import *
-from core.Utils import *
+import os, sys, logging, traceback
+from core.User import User
+from core.Resources import joinThreads, exit_gracefully
+from core.Targets import listPwnableTargets
+from core.SprayLove import sprayLove
+from core.Colors import warningGre, warningRed, red, blue, white
+from core.Utils import retrieveMyIP
 from multiprocessing import Process
 
 def run(args):
@@ -33,7 +31,7 @@ def run(args):
 
     except KeyboardInterrupt:
         logging.warning("%sKeyboard interrupt. Exiting." % (warningRed))
-    except Exception as e:
+    except Exception:
         logging.warning("%sA problem occurs. Err: %s" % (warningRed, red))
         logging.debug("%s==== STACKTRACE ====" % (blue))
         if logging.getLogger().getEffectiveLevel() <= 10: traceback.print_exc(file=sys.stdout)

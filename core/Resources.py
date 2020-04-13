@@ -1,15 +1,10 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
 
-
 # Imports
-import os, logging, time
+import os, sys, logging, time
 import wget, zipfile
-from core.Paths import *
-from core.Args import *
-from core.Colors import *
-from core.Logs import *
+from core.Colors import debugBlue, infoYellow, warningRed, warningGre
 
 def initSpraykatz():
     logging.warning("%sHey, did you read the code?\n" % (debugBlue))

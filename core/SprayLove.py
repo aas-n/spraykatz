@@ -1,16 +1,13 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
 
-
 # Imports
-import logging, traceback
-import wmiexec
-import wmiexec_delete
-from core.Utils import *
-from core.Colors import *
-from core.Arch import *
-from core.Connection import *
+import sys, logging, traceback
+from submodules.customWmiExec import wmiexec
+from submodules.customWmiExec import wmiexec_delete
+from core.Colors import infoYellow, green, white, green, red, blue, warningRed
+from core.Arch import get_os_arch
+from core.Connection import Connection
 
 
 def sprayLove(user, target, local_ip, remove):

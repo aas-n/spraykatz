@@ -1,7 +1,5 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
-
 
 # Colors
 white = '\033[0m'

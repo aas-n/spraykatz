@@ -1,10 +1,8 @@
 # coding: utf-8
-
 # Author:      @aas_s3curity
 
-
 # Imports
-from core.Colors import *
+from core.Colors import green, white
 
 def print_credentials(target, credentials):
     for credential in credentials:
