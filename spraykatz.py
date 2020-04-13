@@ -6,10 +6,11 @@
 
 # Imports
 import os
-from core.Colors import *
-from core.Resources import *
-from core.Engine import *
-from core.Args import *
+from core.Colors import green, white, red
+from core.Args import parseArgs, menu
+from core.Resources import initSpraykatz
+from core.Engine import run
+
 
 def printBanner():
 	''' Print the tool banner '''

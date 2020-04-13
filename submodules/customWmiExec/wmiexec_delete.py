@@ -27,30 +27,18 @@
 # Imports
 from __future__ import division
 from __future__ import print_function
-import sys
-import os
-import cmd
-import argparse
-import time
-import logging
-import ntpath
 
-import os, sys, logging, ntpath, time, shutil, pathlib
-from core.Utils import *
-from core.Colors import *
-from core.Paths import *
-from core.Logs import *
-from impacket.dcerpc.v5.dcomrt import DCOMConnection
-from impacket.dcerpc.v5.dcom import wmi
-from impacket.dcerpc.v5.dtypes import NULL
+import os, sys, cmd, argparse, time, logging, ntpath
+from core.Colors import debugBlue
+from core.Logs import suppress_std
 
 from impacket.examples import logger
 from impacket import version
-from impacket.smbconnection import SMBConnection, SMB_DIALECT, SMB2_DIALECT_002, SMB2_DIALECT_21
 from impacket.dcerpc.v5.dcomrt import DCOMConnection
 from impacket.dcerpc.v5.dcom import wmi
 from impacket.dcerpc.v5.dtypes import NULL
 from six import PY2
+
 
 OUTPUT_FILENAME = '__' + str(time.time())
 CODEC = sys.stdout.encoding
@@ -403,7 +391,7 @@ if __name__ == '__main__':
         if options.aesKey is not None:
             options.k = True
 
-        executer = WMIEXEC(' '.join(options.command), username, password, domain, options.hashes, options.aesKey,
+        executer = WMIEXEC_DELETE(' '.join(options.command), username, password, domain, options.hashes, options.aesKey,
                            options.share, options.nooutput, options.k, options.dc_ip)
         executer.run(address)
     except KeyboardInterrupt as e:

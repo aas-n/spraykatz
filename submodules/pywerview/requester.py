@@ -4,19 +4,12 @@
 # This file comes from Pywerview project by Yannick Méheut [yannick (at) meheut (dot) org] - Copyright © 2016
 # Slightly modified for Spraykatz.
 
-
 # Imports
 import socket
-import ntpath
 from impacket.ldap import ldap, ldapasn1
 from impacket.smbconnection import SMBConnection
 from impacket.dcerpc.v5.rpcrt import RPC_C_AUTHN_LEVEL_PKT_PRIVACY
 from impacket.dcerpc.v5 import transport, wkst, srvs, samr, scmr, drsuapi, epm
-from impacket.dcerpc.v5.dcom import wmi
-from impacket.dcerpc.v5.dtypes import NULL
-from impacket.dcerpc.v5.dcomrt import DCOMConnection
-from impacket.dcerpc.v5.rpcrt import DCERPCException
-
 
 class LDAPRequester():
     def __init__(self, domain_controller, domain=str(), user=(), password=str(), lmhash=str(), nthash=str()):
@@ -226,10 +219,10 @@ class LDAPRPCRequester(LDAPRequester, RPCRequester):
         except (socket.error, IndexError):
             pass
         # This should work every time
-        RPCRequester.__enter__(self)
+        #RPCRequester.__enter__(self)
 
         return self
 
     def __exit__(self, type, value, traceback):
         LDAPRequester.__exit__(self, type, value, traceback)
-        RPCRequester.__exit__(self, type, value, traceback)
+        #RPCRequester.__exit__(self, type, value, traceback)

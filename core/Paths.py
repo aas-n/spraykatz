@@ -1,11 +1,8 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
-
 
 # Imports
 import os, sys
-
 
 # Dirs
 homeDir = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])))

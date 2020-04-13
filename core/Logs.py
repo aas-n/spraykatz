@@ -1,12 +1,9 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
-
 
 # Imports
 import sys, os, logging
 from contextlib import contextmanager
-
 
 def setLogging(verbosity):
     formatter = logging.Formatter('%(message)s')

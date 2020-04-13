@@ -1,14 +1,12 @@
 # coding: utf-8
-
 # Author:       @aas_s3curity
-
 
 # Imports
 import logging
 from impacket.dcerpc.v5.transport import DCERPCTransportFactory
 from impacket.dcerpc.v5.rpcrt import DCERPCException
 from impacket.dcerpc.v5.epm import MSRPC_UUID_PORTMAP
-from core.Colors import *
+from core.Colors import warningRed
 
 def get_os_arch(target):
     try:

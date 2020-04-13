@@ -27,32 +27,20 @@
 # Imports
 from __future__ import division
 from __future__ import print_function
-import sys
-import os
-import cmd
-import argparse
-import time
-import logging
-import ntpath
 
-import os, sys, logging, ntpath, time, shutil, pathlib
+import sys, os, cmd, argparse, time, ntpath, logging
+
 from datetime import datetime
-from core.Utils import *
-from core.Colors import *
-from core.Paths import *
-from core.Logs import *
-from core.Dump import *
-from core.ParseDump import *
-from core.PrintCreds import *
-from core.WriteCreds import *
-from core.Timeout import *
-from impacket.dcerpc.v5.dcomrt import DCOMConnection
-from impacket.dcerpc.v5.dcom import wmi
-from impacket.dcerpc.v5.dtypes import NULL
+from core.Colors import debugBlue
+from core.Logs import suppress_std
+from core.Dump import Dump
+from core.ParseDump import parseDump
+from core.PrintCreds import print_credentials
+from core.WriteCreds import write_credentials
+from core.Timeout import timeout
 
 from impacket.examples import logger
 from impacket import version
-from impacket.smbconnection import SMBConnection, SMB_DIALECT, SMB2_DIALECT_002, SMB2_DIALECT_21
 from impacket.dcerpc.v5.dcomrt import DCOMConnection
 from impacket.dcerpc.v5.dcom import wmi
 from impacket.dcerpc.v5.dtypes import NULL

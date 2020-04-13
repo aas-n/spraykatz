@@ -1,11 +1,8 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
-
 
 # Imports
 import random, string, socket
-
 
 def skip_duplicates(iterable, key=lambda x: x):
 	fingerprints = set()

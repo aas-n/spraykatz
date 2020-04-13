@@ -1,37 +1,13 @@
 # coding: utf-8
-
 # Author:      @aas_s3curity
-
 
 # Imports
 from __future__ import division
 from __future__ import print_function
-import sys
-import os
-import cmd
-import argparse
-import time
+
 import logging
-import ntpath
-
-import os, sys, logging, ntpath, time, shutil, pathlib
-from datetime import datetime
-from core.Utils import *
-from core.Colors import *
-from core.Paths import *
-from core.Logs import *
-from impacket.dcerpc.v5.dcomrt import DCOMConnection
-from impacket.dcerpc.v5.dcom import wmi
-from impacket.dcerpc.v5.dtypes import NULL
-
-from impacket.examples import logger
-from impacket import version
+from core.Colors import debugBlue
 from impacket.smbconnection import SMBConnection, SMB_DIALECT, SMB2_DIALECT_002, SMB2_DIALECT_21
-from impacket.dcerpc.v5.dcomrt import DCOMConnection
-from impacket.dcerpc.v5.dcom import wmi
-from impacket.dcerpc.v5.dtypes import NULL
-from six import PY2
-
 
 class Connection:
     def __init__(self, username='', password='', domain='', hashes=None, aesKey=None, share='ADMIN$', noOutput=False, doKerberos=False, kdcHost=None):

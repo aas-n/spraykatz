@@ -1,28 +1,20 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
 
-
 # Imports
-import os, logging, glob
-from core.Colors import *
-from core.Paths import *
-from core.Utils import *
-from core.Dump import *
+import logging, sys, traceback
+from core.Colors import warningRed, red, blue, white
+from core.Utils import skip_duplicates
 from pypykatz.pypykatz import pypykatz
-import traceback
-
 
 def parseDump(dump, target):
     credentials = []
     result = []
-    dico = {}
 
     try:
         result = pypykatz.parse_minidump_external(dump)
         
         for luid in result.logon_sessions:
-            dico = result.logon_sessions[luid].to_dict() 
 
             for cred in result.logon_sessions[luid].msv_creds:
                 if cred.username != None:

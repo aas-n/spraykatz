@@ -1,19 +1,17 @@
 # coding: utf-8
-
 # Author:	@aas_s3curity
-
 
 # Imports
 import sys, os, argparse
-from core.Colors import *
-from core.Logs import *
-from core.Utils import *
+from core.Colors import warningRed
+from core.Logs import setLogging
+from core.Utils import skip_duplicates
 
 class SpraykatzParser(argparse.ArgumentParser):
     def error(self, message):
         self.print_help()
         print("\n%sError: %s\n" % (warningRed, message))
-        sys.exit(2)
+        sys.exit(0)
 
 def parseArgs(parser):
     args = parser.parse_args()

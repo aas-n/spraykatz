@@ -1,12 +1,8 @@
 # coding: utf-8
-
-# Author:      @aas_s3curity
-
+# Author:   @aas_s3curity
 
 # Imports
-import logging
-from core.Colors import *
-from core.Paths import *
+import os, sys
 
 def write_credentials(target, credentials):
     credsFile = open(os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])), 'misc', 'results', 'creds.txt'), 'a')
