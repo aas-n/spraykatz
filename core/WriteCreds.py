@@ -9,18 +9,18 @@ def write_credentials(target, credentials):
     
     for credential in credentials:
         credsFile.write("%s" % (target))
-        if credential[0] is not 'NA':
+        if credential[0] != 'NA':
             credsFile.write(":%s" % (credential[0]))
         credsFile.write(":%s" % (credential[1]))
-        if credential[2] is not 'NA':
+        if credential[2] != 'NA':
             credsFile.write(":%s" % (credential[2]))
         else:
             credsFile.write(":")
-        if credential[3] is not 'NA':
+        if credential[3] != 'NA':
             credsFile.write(":%s" % (credential[3]))
         else:
             credsFile.write(":")
-        if credential[4] is not 'NA':
+        if credential[4] != 'NA':
             credsFile.write(":%s" % (credential[4]))
         
         credsFile.write("\n")

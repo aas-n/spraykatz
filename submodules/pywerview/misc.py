@@ -6,8 +6,8 @@
 
 # Imports
 from submodules.pywerview.requester import LDAPRPCRequester
-from submodules.impacket.impacket.dcerpc.v5.rpcrt import DCERPCException
-from submodules.impacket.impacket.dcerpc.v5 import scmr
+from impacket.dcerpc.v5.rpcrt import DCERPCException
+from impacket.dcerpc.v5 import scmr
 
 class Misc(LDAPRPCRequester):
     @LDAPRPCRequester._rpc_connection_init(r'\svcctl')

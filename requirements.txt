@@ -1,3 +1,4 @@
+impacket
 pyCryptodomex
 pyasn1
 pyOpenSSL

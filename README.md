@@ -9,7 +9,7 @@
 <h4 align="center">Spray love around the world</h4>
 <p align="center">
   <a href="https://github.com/aas-n/spraykatz">
-    <img src="https://img.shields.io/badge/Release-0.9.8-green.svg">
+    <img src="https://img.shields.io/badge/Release-0.9.9-green.svg">
   </a>
   <a href="https://twitter.com/aas_s3curity">
     <img src="https://img.shields.io/badge/Twitter-aas-blue.svg">
@@ -41,7 +41,7 @@ On a fresh updated Ubuntu.
 ```bash
 apt update
 apt install -y python3.6 python3-pip git nmap
-git clone --recurse-submodules https://github.com/aas-n/spraykatz.git
+git clone https://github.com/aas-n/spraykatz.git
 cd spraykatz
 pip3 install -r requirements.txt
 ```
@@ -73,6 +73,10 @@ A quick start could be:
 
 ### Changelog
 ```
+Version 0.9.9
+=============
+- Removing impacket submodules (just use pip).
+
 Version 0.9.8
 =============
 - ProcDump binaries are not embedded anymore. Spraykatz ask for downloading them now.
