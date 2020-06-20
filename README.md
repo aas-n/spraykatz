@@ -35,7 +35,7 @@ Spraykatz is a tool without any pretention able to **retrieve credentials** on W
 It simply tries to __procdump__ machines and __parse dumps remotely__ in order to **avoid detections** by antivirus softwares as much as possible.
 
 ### Installation
-This tool is written for **`3<=python=3.6`**. Do not use this on production environments!
+This tool is written for **`python3 to python3.6`**. Do not use this on production environments!
 #### Ubuntu
 On a fresh updated Ubuntu.
 ```bash
